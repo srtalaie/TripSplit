@@ -7,14 +7,20 @@ const userSchema = new mongoose.Schema({
     unique: true,
     min: 3,
   },
-  first_name: { type: String, required: true },
-  last_name: { types: String, required: true },
+  first_name: {
+    type: String,
+    required: true,
+  },
+  last_name: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     trim: true,
     lowercase: true,
     unique: true,
-    required: 'Email address is required',
+    required: true,
     validate: {
       validator(v) {
         return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v)

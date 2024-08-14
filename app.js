@@ -9,7 +9,7 @@ const compression = require('compression')
 const helmet = require('helmet')
 
 const indexRouter = require('./routes/index')
-const usersRouter = require('./routes/users')
+const userRouter = require('./routes/userRoutes')
 
 const app = express()
 
@@ -56,7 +56,7 @@ app.get('/', function (req, res) {
 })
 
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
+app.use('/users', userRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -71,7 +71,6 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.render('error')
 })
 
 module.exports = app
