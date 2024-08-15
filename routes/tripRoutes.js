@@ -2,10 +2,13 @@ const express = require('express')
 const router = express.Router()
 const tripController = require('../controllers/tripController')
 
-// User/Login Routes
+// Trip Routes
 
-// Get Users
+// Get Trips
 router.get('/', tripController.get_all_trips)
+
+// Create Trip
+router.post('/create', tripController.create_trip)
 
 // Get User by :id
 router.get('/:id', tripController.get_trip)

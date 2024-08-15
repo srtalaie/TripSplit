@@ -6,6 +6,7 @@ const User = require('../models/user')
 
 const { body, validationResult, oneOf } = require('express-validator')
 
+// Get all Trips
 exports.get_all_trips = asyncHandler(async (req, res, next) => {
   const trips = await Trip.find({})
     .populate('members')
@@ -19,6 +20,7 @@ exports.get_all_trips = asyncHandler(async (req, res, next) => {
   }
 })
 
+// Get a Trip
 exports.get_trip = asyncHandler(async (req, res, next) => {
   const decodedToken = jwt.verify(req.token, process.env.SECRET)
 
@@ -37,3 +39,41 @@ exports.get_trip = asyncHandler(async (req, res, next) => {
     return res.status(200).json(trip)
   }
 })
+
+// Create a Trip
+exports.create_trip = [
+  // Validate and sanitize user input
+  body('trip_name')
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage('Must provide a first name.'),
+  body('trip_description').trim().escape().optional(),
+
+  // Process request after validation
+  asyncHandler(async (req, res, next) => {
+    // Extract errors from validation
+    const errors = validationResult(req)
+
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+    if (!decodedToken.email) {
+      return res.status(401).json({ error: 'Token missing or invalid.' })
+    }
+
+    const user = await User.findOne({ email: decodedToken.email }).exec()
+
+    const trip = new Trip({
+      trip_name: req.body.trip_name,
+      trip_description: req.body.trip_description,
+      owner: user._id,
+    })
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() })
+    } else {
+      const savedTrip = await trip.save()
+      return res.status(201).json(savedTrip)
+    }
+  }),
+]

@@ -111,6 +111,7 @@ exports.get_user = asyncHandler(async (req, res, next) => {
 // Add friend
 exports.add_friend = asyncHandler(async (req, res, next) => {
   const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
   if (!decodedToken.email) {
     return res.status(401).json({ error: 'Token missing or invalid.' })
   }
