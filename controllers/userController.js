@@ -335,3 +335,5 @@ exports.update_user = [
     return res.status(201).json(user)
   }),
 ]
+
+//TODO remove friends
