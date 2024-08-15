@@ -14,8 +14,11 @@ router.post('/create', userController.create_user)
 // Login User
 router.post('/login', loginController.login_user)
 
-// Add friend
+// Add Friend
 router.put('/add_friend/:id', userController.add_friend)
+
+// Remove Friend
+router.put('/remove_friend/:id', userController.remove_friend)
 
 // Update User
 router.put('/update/:id', userController.update_user)

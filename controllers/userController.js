@@ -128,7 +128,7 @@ exports.add_friend = asyncHandler(async (req, res, next) => {
     })
   }
 
-  const idCheck = (user) => user._id.toString() === friend._id.toString()
+  const idCheck = (element) => element._id.toString() === friend._id.toString()
 
   if (!friend) {
     return res.status(404).send({ message: 'User not found.' })
@@ -232,4 +232,43 @@ exports.update_user = [
   }),
 ]
 
-//TODO remove friends
+// Remove a Friend
+exports.remove_friend = asyncHandler(async (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+  if (!decodedToken.email) {
+    return res.status(401).json({ error: 'Token missing or invalid.' })
+  }
+
+  const [user, friend] = await Promise.all([
+    User.findById(req.params.id).populate('trips').populate('friends').exec(),
+    User.findById(req.body.id).exec(),
+  ])
+
+  if (decodedToken.email !== user.email) {
+    return res.status(401).json({
+      error: 'You are not authorized to make changes to this profile.',
+    })
+  }
+
+  // Filter out friend from user's friends list and remove user from friends' friends list
+  const filteredFriendsUser = user.friends.filter(
+    (friend) => friend._id.toString() !== req.body.id
+  )
+  const filteredFriendsFriend = friend.friends.filter(
+    (friend) => friend._id.toString() !== req.params.id
+  )
+
+  if (!friend) {
+    return res.status(404).send({ message: 'User not found.' })
+  } else if (friend._id === user._id) {
+    return res
+      .status(406)
+      .send({ message: 'Cannot remove yourself as a friend' })
+  } else {
+    user.friends = filteredFriendsUser
+    friend.friends = filteredFriendsFriend
+    await user.save()
+    await friend.save()
+    return res.status(201).json(user)
+  }
+})
