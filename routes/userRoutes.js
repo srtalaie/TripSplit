@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const userController = require('../controllers/userController')
+const loginController = require('../controllers/loginController')
 
 // User/Login Routes
 
@@ -11,7 +12,7 @@ router.get('/', userController.get_all_users)
 router.post('/create', userController.create_user)
 
 // Login User
-router.post('/login', userController.login_user)
+router.post('/login', loginController.login_user)
 
 // Add friend
 router.put('/add_friend/:id', userController.add_friend)
