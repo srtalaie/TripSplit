@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler')
 
 const Trip = require('../models/trip')
 const User = require('../models/user')
+const Event = require('../models/event')
 
 const { body, validationResult, oneOf } = require('express-validator')
 
@@ -27,21 +28,19 @@ exports.get_trip = asyncHandler(async (req, res, next) => {
   const trip = await Trip.findById(req.params.id)
     .populate('members')
     .populate('events')
+    .populate('owner')
     .exec()
-  const user = await User.findOne({ email: decodedToken.email }).exec()
 
-  const emailCheck = (user) => user.email === decodedToken.email
+  const emailCheck = (element) => element.email === decodedToken.email
 
   if (!trip) {
     return res.status(404).send({ message: 'Trip not found.' })
-  } else if (user._id.toString() !== trip.owner) {
-    return res
-      .status(401)
-      .send({
-        message:
-          'You cannot access this trip, you are not the owner of this trip.',
-      })
-  } else if (!trip.members.some(emailCheck)) {
+  } else if (decodedToken.id !== trip.owner._id.toString()) {
+    return res.status(401).send({
+      message:
+        'You cannot access this trip, you are not the owner of this trip.',
+    })
+  } else if (trip.members.length > 0 && !trip.members.some(emailCheck)) {
     return res.status(401).send({
       message: 'You cannot access this trip, you are not part of this trip.',
     })

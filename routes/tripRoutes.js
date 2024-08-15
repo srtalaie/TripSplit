@@ -10,7 +10,7 @@ router.get('/', tripController.get_all_trips)
 // Create Trip
 router.post('/create', tripController.create_trip)
 
-// Get User by :id
+// Get Trip by :id
 router.get('/:id', tripController.get_trip)
 
 module.exports = router

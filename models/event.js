@@ -27,6 +27,11 @@ const eventSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  trip: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Trip',
+    required: true,
+  },
 })
 
 //Virtual for Event's URL
