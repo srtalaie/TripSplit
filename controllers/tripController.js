@@ -88,7 +88,7 @@ exports.create_trip = [
 ]
 
 // Update a Trip
-exports.create_trip = [
+exports.update_trip = [
   // Validate and sanitize user input
   oneOf(
     [
@@ -135,8 +135,8 @@ exports.create_trip = [
         .send(401)
         .send({ message: "You are not authorized to update this trip's info." })
     } else {
-      const savedTrip = await trip.save()
-      return res.status(201).json(savedTrip)
+      await Trip.findByIdAndUpdate(req.params.id, trip)
+      return res.status(201).json(trip)
     }
   }),
 ]
