@@ -14,6 +14,12 @@ const tripSchema = new mongoose.Schema({
       ref: 'Event',
     },
   ],
+  members: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 })
 
 //Virtual for Trip's URL

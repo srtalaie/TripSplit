@@ -38,6 +38,12 @@ const userSchema = new mongoose.Schema({
       ref: 'Trip',
     },
   ],
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 })
 
 //Virtual for User's URL

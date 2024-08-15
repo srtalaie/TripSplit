@@ -8,7 +8,11 @@ const logger = require('morgan')
 const compression = require('compression')
 const helmet = require('helmet')
 
+const middleware = require('./utils/middleware')
+
 const indexRouter = require('./routes/index')
+
+const tripRouter = require('./routes/tripRoutes')
 const userRouter = require('./routes/userRoutes')
 
 const app = express()
@@ -37,6 +41,8 @@ async function main() {
 
 app.use(logger('dev'))
 app.use(express.json())
+app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor)
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(compression()) // Compress all routes
@@ -56,7 +62,9 @@ app.get('/', function (req, res) {
 })
 
 app.use('/', indexRouter)
+
 app.use('/users', userRouter)
+app.use('/trips', tripRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
