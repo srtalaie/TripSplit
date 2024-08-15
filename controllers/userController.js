@@ -111,57 +111,39 @@ exports.get_user = asyncHandler(async (req, res, next) => {
 })
 
 // Add friend
-exports.add_friend = [
-  // Validate and sanitize user input
-  body('username')
-    .trim()
-    .isLength({ min: 3 })
-    .escape()
-    .withMessage('Must provide a username.'),
+exports.add_friend = asyncHandler(async (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+  if (!decodedToken.email) {
+    return res.status(401).json({ error: 'Token missing or invalid.' })
+  }
 
-  // Process after validation
-  asyncHandler(async (req, res, next) => {
-    // Extract errors from above validation
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() })
-    }
+  const [user, friend] = await Promise.all([
+    User.findById(req.params.id).populate('trips').populate('friends').exec(),
+    User.findById(req.body.id).exec(),
+  ])
 
-    const decodedToken = jwt.verify(req.token, process.env.SECRET)
-    if (!decodedToken.email) {
-      return res.status(401).json({ error: 'Token missing or invalid.' })
-    }
+  if (decodedToken.email !== user.email) {
+    return res.status(401).json({
+      error: 'You are not authorized to make changes to this profile.',
+    })
+  }
 
-    const [user, friend] = await Promise.all([
-      User.findById(req.params.id).populate('trips').populate('friends').exec(),
-      User.findOne({ username: req.body.username }).exec(),
-    ])
+  const idCheck = (user) => user._id.toString() === friend._id.toString()
 
-    if (decodedToken.email !== user.email) {
-      return res.status(401).json({
-        error: 'You are not authorized to make changes to this profile.',
-      })
-    }
-
-    const idCheck = (user) => user._id.toString() === friend._id.toString()
-
-    if (!friend) {
-      return res.status(404).send({ message: 'User not found.' })
-    } else if (friend.username === user.username) {
-      return res
-        .status(406)
-        .send({ message: 'Cannot add yourself as a friend' })
-    } else if (user.friends.some(idCheck)) {
-      return res.status(409).send({ message: 'Friend already exists' })
-    } else {
-      user.friends = user.friends.concat(friend._id)
-      friend.friends = friend.friends.concat(user._id)
-      await user.save()
-      await friend.save()
-      return res.status(201).json(user)
-    }
-  }),
-]
+  if (!friend) {
+    return res.status(404).send({ message: 'User not found.' })
+  } else if (friend._id === user._id) {
+    return res.status(406).send({ message: 'Cannot add yourself as a friend' })
+  } else if (user.friends.some(idCheck)) {
+    return res.status(409).send({ message: 'Friend already exists' })
+  } else {
+    user.friends = user.friends.concat(friend._id)
+    friend.friends = friend.friends.concat(user._id)
+    await user.save()
+    await friend.save()
+    return res.status(201).json(user)
+  }
+})
 
 // Update Profile
 exports.update_user = [
