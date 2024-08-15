@@ -70,7 +70,7 @@ exports.create_trip = [
       return res.status(401).json({ error: 'Token missing or invalid.' })
     }
 
-    const user = await User.findOne({ email: decodedToken.email }).exec()
+    const user = await User.findById(decodedToken.id).exec()
 
     const trip = new Trip({
       trip_name: req.body.trip_name,
@@ -80,6 +80,60 @@ exports.create_trip = [
 
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() })
+    } else {
+      const savedTrip = await trip.save()
+      return res.status(201).json(savedTrip)
+    }
+  }),
+]
+
+// Update a Trip
+exports.create_trip = [
+  // Validate and sanitize user input
+  oneOf(
+    [
+      body('trip_name')
+        .trim()
+        .isLength({ min: 3 })
+        .escape()
+        .withMessage('Must provide a first name.'),
+      body('trip_description').trim().escape().optional(),
+    ],
+    { message: 'Please provide an updated details.' }
+  ),
+
+  // Process request after validation
+  asyncHandler(async (req, res, next) => {
+    // Extract errors from validation
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() })
+    }
+
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+    if (!decodedToken.email) {
+      return res.status(401).json({ error: 'Token missing or invalid.' })
+    }
+    const [oldTrip, user] = await Promise.all([
+      Trip.findById(req.params.id).exec(),
+      User.findById(decodedToken.id).exec(),
+    ])
+
+    const trip = new Trip({
+      trip_name: req.body.trip_name,
+      trip_description: req.body.trip_description,
+      events: oldTrip.events,
+      members: oldTrip.members,
+      owner: user._id,
+      _id: oldTrip._id,
+    })
+
+    if (!oldTrip) {
+      return res.send(404).send({ message: 'Could not find trip.' })
+    } else if (decodedToken.id !== oldTrip.owner._id.toString()) {
+      return res
+        .send(401)
+        .send({ message: "You are not authorized to update this trip's info." })
     } else {
       const savedTrip = await trip.save()
       return res.status(201).json(savedTrip)

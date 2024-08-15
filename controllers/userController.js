@@ -117,11 +117,11 @@ exports.add_friend = asyncHandler(async (req, res, next) => {
   }
 
   const [user, friend] = await Promise.all([
-    User.findById(req.params.id).populate('trips').populate('friends').exec(),
-    User.findById(req.body.id).exec(),
+    User.findById(decodedToken.id).populate('trips').populate('friends').exec(),
+    User.findById(req.params.id).exec(),
   ])
 
-  if (decodedToken.email !== user.email) {
+  if (decodedToken.id !== user._id.toString()) {
     return res.status(401).json({
       error: 'You are not authorized to make changes to this profile.',
     })
@@ -184,7 +184,7 @@ exports.update_user = [
           'Password must be at least 8 characters long, contain an upper and lower case character, and contain at least 1 special character and 1 number'
         ),
     ],
-    { message: 'Please provide an update.' }
+    { message: 'Please provide an updated details.' }
   ),
 
   // Process after validation
@@ -239,11 +239,11 @@ exports.remove_friend = asyncHandler(async (req, res, next) => {
   }
 
   const [user, friend] = await Promise.all([
-    User.findById(req.params.id).populate('trips').populate('friends').exec(),
-    User.findById(req.body.id).exec(),
+    User.findById(decodedToken.id).populate('trips').populate('friends').exec(),
+    User.findById(req.params.id).exec(),
   ])
 
-  if (decodedToken.email !== user.email) {
+  if (decodedToken.id !== user._id.toString()) {
     return res.status(401).json({
       error: 'You are not authorized to make changes to this profile.',
     })
@@ -251,10 +251,10 @@ exports.remove_friend = asyncHandler(async (req, res, next) => {
 
   // Filter out friend from user's friends list and remove user from friends' friends list
   const filteredFriendsUser = user.friends.filter(
-    (friend) => friend._id.toString() !== req.body.id
+    (friend) => friend._id.toString() !== req.params.id
   )
   const filteredFriendsFriend = friend.friends.filter(
-    (friend) => friend._id.toString() !== req.params.id
+    (friend) => friend._id.toString() !== decodedToken.id
   )
 
   if (!friend) {
@@ -266,8 +266,8 @@ exports.remove_friend = asyncHandler(async (req, res, next) => {
   } else {
     user.friends = filteredFriendsUser
     friend.friends = filteredFriendsFriend
-    await user.save()
-    await friend.save()
+    await User.findByIdAndUpdate(decodedToken.id, user)
+    await User.findByIdAndUpdate(friend._id, friend)
     return res.status(201).json(user)
   }
 })
