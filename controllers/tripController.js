@@ -28,13 +28,23 @@ exports.get_trip = asyncHandler(async (req, res, next) => {
     .populate('members')
     .populate('events')
     .exec()
+  const user = await User.findOne({ email: decodedToken.email }).exec()
 
   const emailCheck = (user) => user.email === decodedToken.email
 
   if (!trip) {
     return res.status(404).send({ message: 'Trip not found.' })
+  } else if (user._id.toString() !== trip.owner) {
+    return res
+      .status(401)
+      .send({
+        message:
+          'You cannot access this trip, you are not the owner of this trip.',
+      })
   } else if (!trip.members.some(emailCheck)) {
-    return res.status(401).send({ message: 'You are not part of this trip.' })
+    return res.status(401).send({
+      message: 'You cannot access this trip, you are not part of this trip.',
+    })
   } else {
     return res.status(200).json(trip)
   }
