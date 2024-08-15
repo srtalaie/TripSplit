@@ -28,6 +28,7 @@ exports.get_trip = asyncHandler(async (req, res, next) => {
     .exec()
 
   const emailCheck = (user) => user.email === decodedToken.email
+
   if (!trip) {
     return res.status(404).send({ message: 'Trip not found.' })
   } else if (!trip.members.some(emailCheck)) {

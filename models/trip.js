@@ -20,6 +20,10 @@ const tripSchema = new mongoose.Schema({
       ref: 'User',
     },
   ],
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 })
 
 //Virtual for Trip's URL
