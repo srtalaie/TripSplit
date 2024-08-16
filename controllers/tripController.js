@@ -81,7 +81,10 @@ exports.create_trip = [
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() })
     } else {
+      trip.members.push(user._id)
       const savedTrip = await trip.save()
+      const updatedUserTrips = user.trips.concat(savedTrip._id)
+      await User.findByIdAndUpdate(decodedToken.id, { trips: updatedUserTrips })
       return res.status(201).json(savedTrip)
     }
   }),
