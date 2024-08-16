@@ -26,7 +26,7 @@ const tripSchema = new mongoose.Schema({
   },
 })
 
-//Virtual for Trip's URL
+// Virtual for Trip's URL
 tripSchema.virtual('url').get(function () {
   return `/trips/${this._id}`
 })

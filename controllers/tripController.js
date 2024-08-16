@@ -143,3 +143,41 @@ exports.update_trip = [
     }
   }),
 ]
+
+// Delete Trip
+exports.delete_trip = asyncHandler(async (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+  if (!decodedToken.email) {
+    return res.status(401).json({ error: 'Token missing or invalid.' })
+  }
+
+  const [user, trip] = await Promise.all([
+    User.findById(decodedToken.id).exec(),
+    Trip.findById(req.params.id).exec(),
+  ])
+
+  if (!trip) {
+    return res.status(404).send({
+      message: 'Cannot find trip.',
+    })
+  } else if (user._id.toString() !== trip.owner._id.toString()) {
+    return res.status(401).send({
+      message:
+        'You cannot delete this trip, only the owner of the trip can delete.',
+    })
+  } else {
+    // Remove trips from User's trips array
+    const userFilteredTrips = user.trips.filter(
+      (trip) => trip._id.toString() !== req.params.id
+    )
+    await User.findByIdAndUpdate(decodedToken.id, { trips: userFilteredTrips })
+
+    // Remove all events that are part of the trip
+    if (trip.events.length > 0) {
+      await Event.deleteMany({ _id: { $in: [...trip.events] } })
+    }
+
+    await Trip.findByIdAndDelete(req.params.id)
+    return res.status(202).send({ message: 'Successfully deleted trip.' })
+  }
+})
