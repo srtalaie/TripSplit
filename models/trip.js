@@ -16,8 +16,26 @@ const tripSchema = new mongoose.Schema({
   ],
   members: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      member: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+      total_owed: {
+        type: Number,
+        default: 0,
+      },
+      cost_breakdown: [
+        {
+          member_owed: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+          },
+          owed_amount: {
+            type: Number,
+            default: 0,
+          },
+        },
+      ],
     },
   ],
   owner: {

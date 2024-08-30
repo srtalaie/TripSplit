@@ -31,7 +31,7 @@ exports.get_trip = asyncHandler(async (req, res, next) => {
     .populate('owner')
     .exec()
 
-  const emailCheck = (element) => element.email === decodedToken.email
+  const idCheck = (element) => element._id.toString() === decodedToken.id
 
   if (!trip) {
     return res.status(404).send({ message: 'Trip not found.' })
@@ -40,7 +40,9 @@ exports.get_trip = asyncHandler(async (req, res, next) => {
       message:
         'You cannot access this trip, you are not the owner of this trip.',
     })
-  } else if (trip.members.length > 0 && !trip.members.some(emailCheck)) {
+  } else if (trip.members.length > 0 && !trip.members.some(idCheck)) {
+    console.log(trip.members.some(idCheck))
+
     return res.status(401).send({
       message: 'You cannot access this trip, you are not part of this trip.',
     })
@@ -81,7 +83,7 @@ exports.create_trip = [
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() })
     } else {
-      trip.members.push(user._id)
+      trip.members.push({ member: user._id })
       const savedTrip = await trip.save()
       const updatedUserTrips = user.trips.concat(savedTrip._id)
       await User.findByIdAndUpdate(decodedToken.id, { trips: updatedUserTrips })
@@ -166,11 +168,15 @@ exports.delete_trip = asyncHandler(async (req, res, next) => {
         'You cannot delete this trip, only the owner of the trip can delete.',
     })
   } else {
-    // Remove trips from User's trips array
-    const userFilteredTrips = user.trips.filter(
-      (trip) => trip._id.toString() !== req.params.id
+    // Gather all user id's tied to the trip
+    const member_ids = trip.members.map((element) =>
+      element.member._id.toString()
     )
-    await User.findByIdAndUpdate(decodedToken.id, { trips: userFilteredTrips })
+
+    await User.updateMany(
+      { _id: { $in: [...member_ids] } },
+      { $pull: { trips: req.params.id } }
+    )
 
     // Remove all events that are part of the trip
     if (trip.events.length > 0) {
@@ -179,5 +185,51 @@ exports.delete_trip = asyncHandler(async (req, res, next) => {
 
     await Trip.findByIdAndDelete(req.params.id)
     return res.status(202).send({ message: 'Successfully deleted trip.' })
+  }
+})
+
+// Add Member to Trip
+exports.add_member = asyncHandler(async (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+  if (!decodedToken.email) {
+    return res.status(401).json({ error: 'Token missing or invalid.' })
+  }
+
+  const [user, trip, friend] = await Promise.all([
+    User.findById(decodedToken.id).exec(),
+    Trip.findById(req.params.id).populate('members.member').exec(),
+    User.findById(req.body.member_id).exec(),
+  ])
+
+  const memberIdCheck = (element) =>
+    element.member._id.toString() === req.body.member_id
+
+  if (!trip) {
+    return res.status(404).send({
+      message: 'Cannot find trip.',
+    })
+  } else if (user._id.toString() !== trip.owner._id.toString()) {
+    return res.status(401).send({
+      message:
+        'You cannot add members to this trip, only the owner of the trip can add members to this trip.',
+    })
+  } else if (!req.body.member_id) {
+    return res.status(400).send({
+      message: 'Please provide a valid member to add.',
+    })
+  } else if (trip.members.some(memberIdCheck)) {
+    return res.status(409).send({
+      message: 'This member already exists.',
+    })
+  } else if (!user.friends.includes(req.body.member_id)) {
+    return res.status(400).send({
+      message: "You can only add members that are on your friend's list.",
+    })
+  } else {
+    trip.members = trip.members.concat({ member: friend._id })
+    friend.trips = friend.trips.concat(trip._id)
+    await trip.save()
+    await friend.save()
+    return res.status(201).json(trip)
   }
 })

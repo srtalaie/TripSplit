@@ -13,6 +13,9 @@ router.post('/create', tripController.create_trip)
 // Update Trip
 router.put('/update/:id', tripController.update_trip)
 
+// Add Member to Trip
+router.put('/add_member/:id', tripController.add_member)
+
 // Delete Trip
 router.delete('/delete/:id', tripController.delete_trip)
 

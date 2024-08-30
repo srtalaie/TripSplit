@@ -14,9 +14,20 @@ const eventSchema = new mongoose.Schema({
   },
   payers: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
+      payer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
+      split: {
+        type: Number,
+        required: true,
+      },
+      user_owed: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
     },
   ],
   cost: {
