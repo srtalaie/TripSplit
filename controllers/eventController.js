@@ -27,8 +27,6 @@ exports.get_all_events = asyncHandler(async (req, res, next) => {
         'You cannot access this trip, you are not the owner of this trip.',
     })
   } else if (trip.members.length > 0 && !trip.members.some(idCheck)) {
-    console.log(trip.members.some(idCheck))
-
     return res.status(401).send({
       message: 'You cannot access this trip, you are not part of this trip.',
     })
