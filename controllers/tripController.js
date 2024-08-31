@@ -31,7 +31,7 @@ exports.get_trip = asyncHandler(async (req, res, next) => {
     .populate('owner')
     .exec()
 
-  const idCheck = (element) => element._id.toString() === decodedToken.id
+  const idCheck = (element) => element.member.toString() === decodedToken.id
 
   if (!trip) {
     return res.status(404).send({ message: 'Trip not found.' })
@@ -41,8 +41,6 @@ exports.get_trip = asyncHandler(async (req, res, next) => {
         'You cannot access this trip, you are not the owner of this trip.',
     })
   } else if (trip.members.length > 0 && !trip.members.some(idCheck)) {
-    console.log(trip.members.some(idCheck))
-
     return res.status(401).send({
       message: 'You cannot access this trip, you are not part of this trip.',
     })
