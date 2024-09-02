@@ -7,11 +7,11 @@ const eventController = require('../controllers/eventController')
 // Create Event
 router.post('/create/:trip_id', eventController.create_event)
 
-// Update Trip
+// Update Event
 router.put('/update/:trip_id/:event_id', eventController.update_event)
 
-// Update Trip
-router.put('/add_payers/:trip_id/:event_id', eventController.update_event)
+// Add Payers to Event
+router.put('/add_payers/:trip_id/:event_id', eventController.add_payers)
 
 // Delete Trip
 router.delete('/delete/:trip_id/:event_id', eventController.delete_event)

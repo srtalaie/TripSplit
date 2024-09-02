@@ -133,4 +133,75 @@ exports.update_event = [asyncHandler(async (req, res, next) => {})]
 exports.delete_event = asyncHandler(async (req, res, next) => {})
 
 // Add Payers
-exports.add_payers = asyncHandler(async (req, res, next) => {})
+exports.add_payers = asyncHandler(async (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+  if (!decodedToken.email) {
+    return res.status(401).json({ error: 'Token missing or invalid.' })
+  }
+
+  const payersArr = req.body.payersArr
+  const [user, trip, event] = await Promise.all([
+    User.findById(decodedToken.id).exec(),
+    Trip.findById(req.params.trip_id).exec(),
+    Event.findById(req.params.event_id).exec(),
+  ])
+
+  const payerMemberCheck = (payers, members) => {
+    const membersToString = members.map((item) => item.member.toString())
+    return payers.every((item) => membersToString.includes(item.payer))
+  }
+
+  if (!user || !trip || !event) {
+    return res.status(404).send({ message: 'User, trip or event not found.' })
+  } else if (payersArr.length < 0) {
+    return res.status(400).send({ message: 'Must provide at least one payer.' })
+  } else if (user._id.toString() !== event.payee.toString()) {
+    return res
+      .status(401)
+      .send({ message: 'You are not the owner of this event.' })
+  } else if (!payerMemberCheck(payersArr, trip.members)) {
+    return res.status(400).send({
+      message:
+        'Payers must be made members of the trip before they can be added to an event.',
+    })
+  } else if (payersArr.includes(event.payee.toString())) {
+    return res.status(400).send({
+      message: 'Payee cannot be added as a payer for the event they paid for',
+    })
+  } else {
+    // Update payers in the event
+    const payers = payersArr.map((item) => {
+      const newPayer = {
+        payer: item.payer,
+        split: item.split,
+        user_owed: event.payee,
+      }
+      return newPayer
+    })
+
+    // Update member cost breakdown in trip
+    const updatedMembers = trip.members.map((item) => {
+      if (payersArr.some((elem) => elem.payer === item.member.toString())) {
+        const selectedPayer = payersArr.find(
+          (payer) => payer.payer === item.member.toString()
+        )
+
+        item.cost_breakdown.push({
+          member_owed: event.payee,
+          owed_amount: selectedPayer.split,
+        })
+
+        item.total_owed = item.total_owed + selectedPayer.split
+        return item
+      } else {
+        return item
+      }
+    })
+
+    await Event.findByIdAndUpdate(event._id, { payers: [...payers] })
+    await Trip.findByIdAndUpdate(trip._id, { members: [...updatedMembers] })
+
+    res.status(201).json(event)
+  }
+})
