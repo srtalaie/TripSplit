@@ -127,7 +127,72 @@ exports.create_event = [
 ]
 
 // Update an Event
-exports.update_event = [asyncHandler(async (req, res, next) => {})]
+exports.update_event = [
+  oneOf(
+    // Validate and Sanitize user input
+    [
+      body('event_name')
+        .trim()
+        .isLength({ min: 3 })
+        .escape()
+        .withMessage('Must provide a first name.'),
+      body('event_description').trim().escape().optional(),
+      body('cost')
+        .trim()
+        .isDecimal()
+        .escape()
+        .withMessage('Must provide a total cost for the event.'),
+    ],
+    { message: 'Please provide an update to the event.' }
+  ),
+
+  // Process request after validation
+  asyncHandler(async (req, res, next) => {
+    // Extract errors from validation
+    const errors = validationResult(req)
+
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+    if (!decodedToken.email) {
+      return res.status(401).json({ error: 'Token missing or invalid.' })
+    }
+
+    const [user, trip, oldEvent] = await Promise.all([
+      User.findById(decodedToken.id).exec(),
+      Trip.findById(req.params.trip_id).exec(),
+      Event.findById(req.params.event_id).exec(),
+    ])
+
+    const event = new Event({
+      event_name: req.body.event_name,
+      event_description: req.body.event_description,
+      cost: req.body.cost ? req.body.cost : oldEvent.cost,
+      payee: oldEvent.payee,
+      trip: oldEvent.trip,
+      _id: oldEvent._id,
+      payers: [...oldEvent.payers],
+    })
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() })
+    } else {
+      const updatedMembers = trip.members.map((elem) => {
+        if (elem.member.toString() === user._id.toString()) {
+          elem.total_owed = elem.total_owed - event.cost + oldEvent.cost
+          return elem
+        } else {
+          return elem
+        }
+      })
+
+      await Event.findByIdAndUpdate(req.params.event_id, event)
+      await Trip.findByIdAndUpdate(req.params.trip_id, {
+        members: [...updatedMembers],
+      })
+      return res.status(201).json(event)
+    }
+  }),
+]
 
 // Delete Event
 exports.delete_event = asyncHandler(async (req, res, next) => {})
@@ -205,3 +270,5 @@ exports.add_payers = asyncHandler(async (req, res, next) => {
     res.status(201).json(event)
   }
 })
+
+// Update Payers
