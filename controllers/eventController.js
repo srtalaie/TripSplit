@@ -107,7 +107,20 @@ exports.create_event = [
     } else {
       const savedEvent = await event.save()
       const updatedTripEvents = trip.events.concat(savedEvent._id)
-      await Trip.findByIdAndUpdate(trip._id, { events: updatedTripEvents })
+      // Set payee total_owed in the trip object to minus this event's cost
+      const updatedMembers = trip.members.map((elem) => {
+        if (elem.member.toString() === user._id.toString()) {
+          elem.total_owed = elem.total_owed - event.cost
+          return elem
+        } else {
+          return elem
+        }
+      })
+
+      await Trip.findByIdAndUpdate(trip._id, {
+        events: updatedTripEvents,
+        members: [...updatedMembers],
+      })
       return res.status(201).json(savedEvent)
     }
   }),
