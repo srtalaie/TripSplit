@@ -34,6 +34,10 @@ const tripSchema = new mongoose.Schema({
             type: Number,
             default: 0,
           },
+          event: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Event',
+          },
         },
       ],
     },

@@ -13,10 +13,7 @@ router.put('/update/:trip_id/:event_id', eventController.update_event)
 // Add Payers to Event
 router.put('/add_payers/:trip_id/:event_id', eventController.add_payers)
 
-// Update Payers to Event
-router.put('/update_payers/:trip_id/:event_id', eventController.update_payers)
-
-// Delete Trip
+// Delete Event
 router.delete('/delete/:trip_id/:event_id', eventController.delete_event)
 
 // Get All Events in a Trip

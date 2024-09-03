@@ -195,7 +195,68 @@ exports.update_event = [
 ]
 
 // Delete Event
-exports.delete_event = asyncHandler(async (req, res, next) => {})
+exports.delete_event = asyncHandler(async (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+  if (!decodedToken.email) {
+    return res.status(401).json({ error: 'Token missing or invalid.' })
+  }
+
+  const [user, event, trip] = await Promise.all([
+    User.findById(decodedToken.id).exec(),
+    Event.findById(req.params.event_id).exec(),
+    Trip.findById(req.params.trip_id).exec(),
+  ])
+
+  if (!event) {
+    return res.status(404).send({
+      message: 'Cannot find event.',
+    })
+  } else if (user._id.toString() !== event.payee.toString()) {
+    return res.status(401).send({
+      message:
+        'You cannot delete this event, only the owner of the event can delete.',
+    })
+  } else {
+    // Remove Event from Trip
+    const updatedTripEvents = trip.events.filter((elem) => {
+      if (elem.toString() !== req.params.event_id) {
+        return elem
+      } else {
+        return
+      }
+    })
+
+    // Updated members section of trip (total_owed & cost_breakdown sections)
+    const updatedTripMembers = trip.members.map((member) => {
+      if (event.payee.toString() === member.member.toString()) {
+        member.total_owed = member.total_owed + event.cost
+        return member
+      } else {
+        member.cost_breakdown = member.cost_breakdown.filter((item) => {
+          if (item.event.toString() === req.params.event_id) {
+            member.total_owed = member.total_owed - item.owed_amount
+            member.cost_breakdown.splice(item, 1)
+            return
+          } else {
+            return member
+          }
+        })
+      }
+      return member
+    })
+
+    console.log(updatedTripMembers)
+
+    await Trip.findByIdAndUpdate(req.params.trip_id, {
+      events: [...updatedTripEvents],
+      members: [...updatedTripMembers],
+    })
+    await Event.findByIdAndDelete(req.params.event_id)
+
+    return res.status(202).send({ message: 'Successfully deleted event.' })
+  }
+})
 
 // Add Payers
 exports.add_payers = asyncHandler(async (req, res, next) => {
@@ -255,6 +316,7 @@ exports.add_payers = asyncHandler(async (req, res, next) => {
         item.cost_breakdown.push({
           member_owed: event.payee,
           owed_amount: selectedPayer.split,
+          event: event._id,
         })
 
         item.total_owed = item.total_owed + selectedPayer.split
@@ -270,6 +332,3 @@ exports.add_payers = asyncHandler(async (req, res, next) => {
     res.status(201).json(event)
   }
 })
-
-// Update Payers
-exports.update_payers = asyncHandler(async (req, res, next) => {})
