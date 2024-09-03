@@ -272,7 +272,4 @@ exports.add_payers = asyncHandler(async (req, res, next) => {
 })
 
 // Update Payers
-<<<<<<< HEAD
 exports.update_payers = asyncHandler(async (req, res, next) => {})
-=======
->>>>>>> f5b8f87c30815073c502d2e7310514e15004b7c6
