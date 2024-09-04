@@ -36,6 +36,17 @@ describe('User Route Tests', () => {
     expect(res.body).toHaveLength(3)
   })
 
+  test('GET - Get a User', async () => {
+    let user = await User.find({ username: user_seeds[0].username })
+
+    const res = await api
+      .get(`/users/${user[0]._id.toString()}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(JSON.stringify(res.body)).toEqual(JSON.stringify(user[0]))
+  })
+
   afterAll(() => {
     mongoose.connection.close()
   })

@@ -95,6 +95,7 @@ exports.get_all_users = asyncHandler(async (req, res, next) => {
   }
 })
 
+// Get a User
 exports.get_user = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
     .populate('trips')
