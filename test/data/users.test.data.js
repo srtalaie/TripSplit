@@ -1,4 +1,4 @@
-const users_seeds = [
+const user_seeds = [
   {
     username: 'User_1',
     email: 'user1@gmail.com',
@@ -22,4 +22,4 @@ const users_seeds = [
   },
 ]
 
-module.exports = users_seeds
+module.exports = user_seeds

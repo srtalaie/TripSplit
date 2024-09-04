@@ -1,52 +1,42 @@
-require('dotenv').config()
-
-const supertest = require('supertest')
 const mongoose = require('mongoose')
+const supertest = require('supertest')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
-const app = require('../app')
-const request = supertest(app)
-
+const Trip = require('../models/trip')
 const User = require('../models/user')
-const users_seeds = require('./data/users.test.data')
+
+const user_seeds = require('./data/users.test.data')
 const { passwordHasher } = require('./helpers/utils/passwordHasher')
 
-describe('User Routes Tests', () => {
-  // beforeAll(async () => {
-  //   await mongoose.connect(process.env.MONGO_DEV_URI, {
-  //     useNewUrlParser: true,
-  //     useUnifiedTopology: true,
-  //   })
-  // })
+const app = require('../app')
 
+const api = supertest(app)
+
+beforeEach(async () => {
+  await User.deleteMany({}).exec()
+  console.log('cleared')
+})
+
+describe('User Route Tests', () => {
   beforeEach(async () => {
-    for (user in users_seeds) {
-      const newUser = new User({
-        username: user.username,
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        password_hash: await passwordHasher(user.password_hash),
-      })
-      await newUser.save()
-    }
+    user_seeds.forEach(async (user) => {
+      let userObject = new User(user)
+      userObject.password_hash = await passwordHasher(userObject.password_hash)
+      return userObject
+    })
+    await User.insertMany(user_seeds)
   })
 
-  afterEach(async () => {
-    await User.deleteMany()
+  test('GET - Get All Users', async () => {
+    const res = await api
+      .get('/users/')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    expect(res.body).toHaveLength(3)
   })
 
-  afterAll(async (done) => {
-    await User.drop()
-    await mongoose.connection.close()
-  })
-
-  it('GET - Get All Users', async (done) => {
-    const res = await request.get('/users/')
-    expect(res.status).toBe(200)
-    expect(res.body.length).toBe(testQuotes.length)
-    expect(res.body[0].quote).toBe(testQuotes[0].quote)
-    expect(res.body[0].author).toBe(testQuotes[0].author)
-
-    done()
+  afterAll(() => {
+    mongoose.connection.close()
   })
 })

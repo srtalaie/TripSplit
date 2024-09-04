@@ -30,10 +30,20 @@ app.use(limiter)
 //Connect to MongoDB
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
-const mongoDB =
-  process.env.NODE_ENV == 'development'
-    ? process.env.MONGO_DEV_URI
-    : process.env.MONGO_PROD_URI
+let mongoDB
+if (process.env.NODE_ENV === 'development') {
+  mongoDB = process.env.MONGO_DEV_URI
+  console.log('Running in development mode')
+} else if (process.env.NODE_ENV === 'test') {
+  mongoDB = process.env.MONGO_TEST_URI
+  console.log('Running in test mode')
+} else if (process.env.NODE_ENV === 'production') {
+  mongoDB = process.env.MONGO_PROD_URI
+  console.log('Running in production mode')
+} else {
+  mongoDB = process.env.MONGO_DEV_URI
+  console.log('Running in an unknown environment')
+}
 
 main().catch((err) => console.log(err))
 async function main() {
