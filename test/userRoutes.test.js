@@ -122,7 +122,6 @@ describe('User Route Tests', () => {
         last_name: 'New_Last_Name',
         password: 'NewPassword1234!',
       }
-      console.log(`/users/update/${original_user[0]._id.toString()}`)
 
       const res = await api
         .put(`/users/update/${original_user[0]._id.toString()}`)
@@ -139,6 +138,26 @@ describe('User Route Tests', () => {
       expect(
         bcrypt.compare(res.body.password_hash, updated_user_info.password)
       ).toBeTruthy()
+    })
+
+    test('PUT - Remove friend', async () => {
+      const friend = await User.find({
+        username: user_seeds[0].username,
+      }).exec()
+
+      const res = await api
+        .put(`/users/remove_friend/${friend[0]._id.toString()}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      const user = await User.find({ username: 'NewUserName' }).exec()
+      const updated_friend = await User.find({
+        username: user_seeds[0].username,
+      }).exec()
+
+      expect(user[0].friends).toEqual([])
+      expect(updated_friend[0].friends).toEqual([])
     })
   })
 
