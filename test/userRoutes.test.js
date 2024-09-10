@@ -113,6 +113,25 @@ describe('User Route Tests', () => {
     })
   })
 
+  test('PUT - User is able to update profile', async () => {
+    const original_user = await User.find({ username: 'SignedInUser' }).exec()
+
+    const updated_user_info = {
+      email: 'new_email@test.com',
+      username: 'NewUserName',
+      first_name: 'New_First_Name',
+      last_name: 'New_Last_Name',
+      password: 'NewPassword1234!',
+    }
+
+    const res = await api
+      .put(`/users/add_friend/${original_user[0]._id.toString()}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(updated_user_info)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+
   afterAll(() => {
     mongoose.connection.close()
   })
