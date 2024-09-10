@@ -3,7 +3,6 @@ const supertest = require('supertest')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
-const Trip = require('../models/trip')
 const User = require('../models/user')
 
 const user_seeds = require('./data/users.test.data')
