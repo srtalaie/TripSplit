@@ -205,30 +205,31 @@ exports.update_user = [
       return res
         .status(401)
         .send({ message: 'You are not authorized to update this profile.' })
+    } else {
+      let new_password_hash
+
+      if (req.body.password) {
+        // Hash new passowrd
+        const saltRounds = 10
+        new_password_hash = await bcrypt.hash(req.body.password, saltRounds)
+      }
+
+      const user = new User({
+        username: req.body.username,
+        email: req.body.email,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        password_hash: !req.body.password
+          ? oldUser.password_hash
+          : new_password_hash,
+        friends: oldUser.friends,
+        trips: oldUser.trips,
+        _id: oldUser._id,
+      })
+
+      await User.findByIdAndUpdate(req.params.id, user)
+      return res.status(201).json(user)
     }
-
-    if (req.body.password) {
-      // Hash new passowrd
-      const saltRounds = 10
-      const new_password_hash = await bcrypt.hash(req.body.password, saltRounds)
-      return new_password_hash
-    }
-
-    const user = new User({
-      username: req.body.username,
-      email: req.body.email,
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      password_hash: !req.body.password
-        ? oldUser.password_hash
-        : new_password_hash,
-      friends: oldUser.friends,
-      trips: oldUser.trips,
-      _id: oldUser._id,
-    })
-
-    await User.findByIdAndUpdate(req.params.id, user)
-    return res.status(201).json(user)
   }),
 ]
 

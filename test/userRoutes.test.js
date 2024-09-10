@@ -13,13 +13,13 @@ const app = require('../app')
 
 const api = supertest(app)
 
-beforeEach(async () => {
+beforeAll(async () => {
   await User.deleteMany({}).exec()
   console.log('cleared')
 })
 
 describe('User Route Tests', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     user_seeds.forEach(async (user) => {
       let userObject = new User(user)
       userObject.password_hash = await passwordHasher(userObject.password_hash)
@@ -82,7 +82,7 @@ describe('User Route Tests', () => {
 
   describe('User can preform functions that require login', () => {
     let token
-    beforeEach(async () => {
+    beforeAll(async () => {
       const password_hash = await bcrypt.hash('Test1234!', 10)
       const new_user = await new User({
         email: 'test1234@test.com',
@@ -111,25 +111,35 @@ describe('User Route Tests', () => {
 
       expect(res.body.friends[0]).toEqual(user[0].friends[0]._id.toString())
     })
-  })
 
-  test('PUT - User is able to update profile', async () => {
-    const original_user = await User.find({ username: 'SignedInUser' }).exec()
+    test('PUT - User is able to update profile', async () => {
+      const original_user = await User.find({ username: 'SignedInUser' }).exec()
 
-    const updated_user_info = {
-      email: 'new_email@test.com',
-      username: 'NewUserName',
-      first_name: 'New_First_Name',
-      last_name: 'New_Last_Name',
-      password: 'NewPassword1234!',
-    }
+      const updated_user_info = {
+        email: 'new_email@test.com',
+        username: 'NewUserName',
+        first_name: 'New_First_Name',
+        last_name: 'New_Last_Name',
+        password: 'NewPassword1234!',
+      }
+      console.log(`/users/update/${original_user[0]._id.toString()}`)
 
-    const res = await api
-      .put(`/users/add_friend/${original_user[0]._id.toString()}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(updated_user_info)
-      .expect(201)
-      .expect('Content-Type', /application\/json/)
+      const res = await api
+        .put(`/users/update/${original_user[0]._id.toString()}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(updated_user_info)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      expect(res.body.email).toEqual(updated_user_info.email)
+      expect(res.body.username).toEqual(updated_user_info.username)
+      expect(res.body.first_name).toEqual(updated_user_info.first_name)
+      expect(res.body.last_name).toEqual(updated_user_info.last_name)
+      expect(
+        bcrypt.compare(res.body.password_hash, updated_user_info.password)
+      ).toBeTruthy()
+    })
   })
 
   afterAll(() => {
