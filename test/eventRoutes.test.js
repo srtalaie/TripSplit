@@ -49,16 +49,19 @@ describe('Event Routes Tests', () => {
     new_user.friends = friends
     await new_user.save()
 
+    // Add new_user to friends
     const friends_friend_array_update = friends.map(async (friend) => {
       friend.friends = friend.friends.concat(new_user._id)
       await friend.save()
     })
     await Promise.all(friends_friend_array_update)
 
+    // Create array to save member ids for members array in new Trip
     const member_array = friends.map((user) => {
       return { member: user._id }
     })
 
+    // Create a trip to add events to
     await new Trip({
       trip_name: 'Trip 1',
       trip_description: 'Description for Trip 1',
