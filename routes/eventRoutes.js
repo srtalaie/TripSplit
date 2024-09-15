@@ -20,6 +20,6 @@ router.delete('/delete/:trip_id/:event_id', eventController.delete_event)
 router.get('/:trip_id', eventController.get_all_events)
 
 // Get An Event in a Trip by :id
-router.get('/:event_id', eventController.get_event)
+router.get('/:trip_id/:event_id', eventController.get_event)
 
 module.exports = router

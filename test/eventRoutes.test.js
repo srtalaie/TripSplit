@@ -72,8 +72,113 @@ describe('Event Routes Tests', () => {
     return token
   })
 
+  test('POST - Create an Event', async () => {
+    const trip = await Trip.find({ trip_name: 'Trip 1' }).exec()
+
+    const new_event = {
+      event_name: 'Event 1',
+      event_description: 'Description for Event 1',
+      cost: 400,
+    }
+
+    const res = await api
+      .post(`/events/create/${trip[0]._id.toString()}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(new_event)
+      .set('Accept', 'application/json')
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    expect(res.body._id).toBeTruthy()
+  })
+
   test('GET - Get all Events', async () => {
-    console.log('TODO')
+    const trip = await Trip.find({ trip_name: 'Trip 1' }).exec()
+
+    const res = await api
+      .get(`/events/${trip[0]._id.toString()}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(res.body).toHaveLength(1)
+  })
+
+  test('GET - Get an Event', async () => {
+    const trip = await Trip.find({ trip_name: 'Trip 1' }).exec()
+    const event_id = trip[0].events[0]._id
+    const event = await Event.findById(event_id)
+      .populate('payee')
+      .populate('payers')
+      .populate('trip')
+      .exec()
+
+    const res = await api
+      .get(`/events/${trip[0]._id.toString()}/${event_id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(JSON.stringify(res.body)).toEqual(JSON.stringify(event))
+  })
+
+  test('PUT - Update an Event', async () => {
+    const trip = await Trip.find({ trip_name: 'Trip 1' }).exec()
+    const event_id = trip[0].events[0]._id
+
+    const new_event_info = {
+      event_name: 'New Event',
+      event_description: 'New Description',
+      cost: 1000,
+    }
+
+    const res = await api
+      .put(`/events/update/${trip[0]._id.toString()}/${event_id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(new_event_info)
+      .set('Accept', 'application/json')
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    expect(res.body.event_name).toEqual(new_event_info.event_name)
+    expect(res.body.event_description).toEqual(new_event_info.event_description)
+    expect(res.body.cost).toEqual(new_event_info.cost)
+  })
+
+  test('PUT - Add Payers to Event', async () => {
+    const trip = await Trip.find({ trip_name: 'Trip 1' })
+      .populate('members')
+      .exec()
+    const event_id = trip[0].events[0]._id
+    const user = await User.find({ username: 'TripOwner' }).exec()
+
+    const friends = user[0].friends
+
+    const payers_array = [
+      {
+        payer: friends[0].toString(),
+        split: 250,
+      },
+      {
+        payer: friends[1].toString(),
+        split: 250,
+      },
+      {
+        payer: friends[2].toString(),
+        split: 250,
+      },
+    ]
+    console.log(payers_array)
+
+    const res = await api
+      .put(`/events/add_payers/${trip[0]._id.toString()}/${event_id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(payers_array)
+      .set('Accept', 'application/json')
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    expect(res.body.payers).toHaveLength(3)
   })
 
   afterAll(() => {

@@ -14,14 +14,13 @@ exports.get_all_events = asyncHandler(async (req, res, next) => {
   const trip = await Trip.findById(req.params.trip_id)
     .populate('members')
     .populate('events')
-    .populate('owner')
     .exec()
 
   const idCheck = (element) => element.member.toString() === decodedToken.id
 
   if (!trip) {
     return res.status(404).send({ message: 'Trip not found.' })
-  } else if (decodedToken.id !== trip.owner._id.toString()) {
+  } else if (decodedToken.id !== trip.owner.toString()) {
     return res.status(401).send({
       message:
         'You cannot access this trip, you are not the owner of this trip.',
@@ -49,7 +48,7 @@ exports.get_event = asyncHandler(async (req, res, next) => {
 
   if (!event) {
     return res.status(404).send({ message: 'Event not found.' })
-  } else if (decodedToken.id !== event.payee.toString()) {
+  } else if (decodedToken.id !== event.payee._id.toString()) {
     return res.status(401).send({
       message:
         'You cannot access this event, you are not the payee of this event.',
