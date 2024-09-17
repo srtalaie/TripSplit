@@ -245,8 +245,6 @@ exports.delete_event = asyncHandler(async (req, res, next) => {
       return member
     })
 
-    console.log(updatedTripMembers)
-
     await Trip.findByIdAndUpdate(req.params.trip_id, {
       events: [...updatedTripEvents],
       members: [...updatedTripMembers],
