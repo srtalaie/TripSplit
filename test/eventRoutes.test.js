@@ -154,21 +154,22 @@ describe('Event Routes Tests', () => {
 
     const friends = user[0].friends
 
-    const payers_array = [
-      {
-        payer: friends[0].toString(),
-        split: 250,
-      },
-      {
-        payer: friends[1].toString(),
-        split: 250,
-      },
-      {
-        payer: friends[2].toString(),
-        split: 250,
-      },
-    ]
-    console.log(payers_array)
+    const payers_array = {
+      payersArr: [
+        {
+          payer: friends[0].toString(),
+          split: 250,
+        },
+        {
+          payer: friends[1].toString(),
+          split: 250,
+        },
+        {
+          payer: friends[2].toString(),
+          split: 250,
+        },
+      ],
+    }
 
     const res = await api
       .put(`/events/add_payers/${trip[0]._id.toString()}/${event_id}`)

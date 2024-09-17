@@ -325,9 +325,17 @@ exports.add_payers = asyncHandler(async (req, res, next) => {
       }
     })
 
-    await Event.findByIdAndUpdate(event._id, { payers: [...payers] })
-    await Trip.findByIdAndUpdate(trip._id, { members: [...updatedMembers] })
+    const updated_event = await Event.findByIdAndUpdate(
+      event._id,
+      {
+        payers: [...payers],
+      },
+      { new: true }
+    ).exec()
+    await Trip.findByIdAndUpdate(trip._id, {
+      members: [...updatedMembers],
+    }).exec()
 
-    res.status(201).json(event)
+    res.status(201).json(updated_event)
   }
 })
