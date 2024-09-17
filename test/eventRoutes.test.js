@@ -182,6 +182,22 @@ describe('Event Routes Tests', () => {
     expect(res.body.payers).toHaveLength(3)
   })
 
+  test('DELETE - Delete and Event', async () => {
+    const trip = await Trip.find({ trip_name: 'Trip 1' })
+      .populate('members')
+      .exec()
+    const event_id = trip[0].events[0]._id
+
+    const res = await api
+      .delete(`/events/delete/${trip[0]._id.toString()}/${event_id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(202)
+
+    const event_exists = await Trip.exists({ _id: event_id })
+
+    expect(event_exists).toBeFalsy()
+  })
+
   afterAll(() => {
     mongoose.connection.close()
   })
