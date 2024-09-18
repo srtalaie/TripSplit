@@ -8,7 +8,10 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "build:custom": "webpack --mode=development",
+    "build:serve": "webpack serve --mode=development",
+    "build:test": "serve -s build"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
