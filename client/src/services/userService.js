@@ -1,5 +1,5 @@
-import axios from "axios"
-const baseURL = "/users"
+import axios from 'axios'
+const baseURL = '/api/users'
 
 let token = null
 
@@ -30,11 +30,7 @@ const add_friend = async (friend) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.put(
-    `${baseURL}/add_friend/${friend._id}`,
-    {},
-    config,
-  )
+  const req = await axios.put(`${baseURL}/add_friend/${friend._id}`, {}, config)
   return req.data
 }
 
@@ -45,7 +41,7 @@ const remove_friend = async (friend) => {
   const req = await axios.put(
     `${baseURL}/remove_friend/${friend._id}`,
     {},
-    config,
+    config
   )
   return req.data
 }
@@ -56,6 +52,5 @@ export {
   get_all_users,
   get_user,
   remove_friend,
-  update_user
+  update_user,
 }
-

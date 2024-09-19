@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseURL = '/events'
+const baseURL = '/api/events'
 
 let token = null
 

@@ -74,9 +74,9 @@ app.get('/', function (req, res) {
 
 app.use('/', indexRouter)
 
-app.use('/users', userRouter)
-app.use('/trips', tripRouter)
-app.use('/events', eventRouter)
+app.use('/api/users', userRouter)
+app.use('/api/trips', tripRouter)
+app.use('/api/events', eventRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

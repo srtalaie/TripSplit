@@ -1,5 +1,5 @@
-import axios from "axios"
-const baseURL = "/users"
+import axios from 'axios'
+const baseURL = '/api/users'
 
 let token = null
 
@@ -13,4 +13,3 @@ const login = async (creds) => {
 }
 
 export { login, setToken }
-
