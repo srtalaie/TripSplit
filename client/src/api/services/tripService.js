@@ -32,11 +32,15 @@ const update_trip = async (trip) => {
   return req.data
 }
 
-const add_member = async (member) => {
+const add_member = async (trip, member_id) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.put(`${baseURL}/add_member/${member._id}`)
+  const req = await axios.put(
+    `${baseURL}/add_member/${trip._id}`,
+    member_id,
+    config
+  )
   return req.data
 }
 
@@ -44,7 +48,7 @@ const delete_trip = async (trip) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.delete(`${baseURL}/delete/${trip._id}`)
+  const req = await axios.delete(`${baseURL}/delete/${trip._id}`, config)
   return req.data
 }
 
