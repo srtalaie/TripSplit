@@ -8,11 +8,11 @@ const get_all_trips = async () => {
   return req.data
 }
 
-const get_trip = async (id) => {
+const get_trip = async (tripId) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.get(`${baseURL}/${id}`, config)
+  const req = await axios.get(`${baseURL}/${tripId}`, config)
   return req.data
 }
 
@@ -24,31 +24,31 @@ const create_trip = async (trip) => {
   return req.data
 }
 
-const update_trip = async (trip) => {
+const update_trip = async (tripId, trip) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.put(`${baseURL}/update/${trip._id}`, trip, config)
+  const req = await axios.put(`${baseURL}/update/${tripId}`, trip, config)
   return req.data
 }
 
-const add_member = async (trip, member_id) => {
+const add_member = async (tripId, memberId) => {
   const config = {
     headers: { Authorization: token },
   }
   const req = await axios.put(
-    `${baseURL}/add_member/${trip._id}`,
-    member_id,
+    `${baseURL}/add_member/${tripId}`,
+    memberId,
     config
   )
   return req.data
 }
 
-const delete_trip = async (trip) => {
+const delete_trip = async (tripId) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.delete(`${baseURL}/delete/${trip._id}`, config)
+  const req = await axios.delete(`${baseURL}/delete/${tripId}`, config)
   return req.data
 }
 

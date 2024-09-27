@@ -39,6 +39,13 @@ export const initializeUsers = () => {
   }
 }
 
+export const getAUser = (userId) => {
+  return async (dispatch) => {
+    const foundUser = await get_user(userId)
+    dispatch(getUser(foundUser))
+  }
+}
+
 export const createAUser = (user) => {
   return async (dispatch) => {
     const newUser = await create_user(user)
@@ -46,16 +53,9 @@ export const createAUser = (user) => {
   }
 }
 
-export const getAUser = (id) => {
+export const updateAUser = (userId, user) => {
   return async (dispatch) => {
-    const foundUser = await get_user(id)
-    dispatch(getUser(foundUser))
-  }
-}
-
-export const updateAUser = (user) => {
-  return async (dispatch) => {
-    const updatedUser = await update_user(user._id, user)
+    const updatedUser = await update_user(userId, user)
     dispatch(updateUser(updatedUser))
   }
 }

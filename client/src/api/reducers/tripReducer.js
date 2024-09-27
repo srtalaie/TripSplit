@@ -43,13 +43,20 @@ const tripSlice = createSlice({
   },
 })
 
-export const { updateTrip, appendTrip, setTrips, removeTrip } =
+export const { updateTrip, appendTrip, setTrips, removeTrip, getTrip } =
   tripSlice.actions
 
 export const initializeTrips = () => {
   return async (dispatch) => {
     const trips = await get_all_trips()
     dispatch(setTrips(trips))
+  }
+}
+
+export const getATrip = (tripId) => {
+  return async (dispatch) => {
+    const foundTrip = await get_trip(tripId)
+    dispatch(getTrip(foundTrip))
   }
 }
 
@@ -60,31 +67,24 @@ export const createATrip = (trip) => {
   }
 }
 
-export const updateATrip = (trip) => {
+export const updateATrip = (tripId, trip) => {
   return async (dispatch) => {
-    const updatedTrip = await update_trip(trip._id, trip)
+    const updatedTrip = await update_trip(tripId, trip)
     dispatch(updateTrip(updatedTrip))
   }
 }
 
-export const getATrip = (id) => {
+export const addAMember = (tripId, memberId) => {
   return async (dispatch) => {
-    const foundTrip = await get_trip(id)
-    dispatch(getTrip(foundTrip))
-  }
-}
-
-export const addAMember = (trip, memberId) => {
-  return async (dispatch) => {
-    const updatedTrip = await add_member(trip, memberId)
+    const updatedTrip = await add_member(tripId, memberId)
     dispatch(updateTrip(updatedTrip))
   }
 }
 
-export const removeATrip = (trip) => {
+export const removeATrip = (tripId) => {
   return async (dispatch) => {
-    await delete_trip(trip)
-    dispatch(removeTrip(trip))
+    await delete_trip(tripId)
+    dispatch(removeTrip(tripId))
   }
 }
 

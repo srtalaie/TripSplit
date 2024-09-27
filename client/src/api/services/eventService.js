@@ -3,60 +3,60 @@ const baseURL = '/api/events'
 
 let token = null
 
-const get_all_events = async (trip) => {
+const get_all_events = async (tripId) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.get(`${baseURL}/${trip._id}`, config)
+  const req = await axios.get(`${baseURL}/${tripId}`, config)
   return req.data
 }
 
-const get_event = async (trip, event) => {
+const get_event = async (tripId, eventId) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.get(`${baseURL}/${trip._id}/${event._id}`, config)
+  const req = await axios.get(`${baseURL}/${tripId}/${eventId}`, config)
   return req.data
 }
 
-const create_event = async (trip, event) => {
+const create_event = async (tripId, event) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.post(`${baseURL}/create/${trip._id}`, event, config)
+  const req = await axios.post(`${baseURL}/create/${tripId}`, event, config)
   return req.data
 }
 
-const update_event = async (trip, event) => {
+const update_event = async (tripId, eventId, event) => {
   const config = {
     headers: { Authorization: token },
   }
   const req = await axios.put(
-    `${baseURL}/update/${trip._id}/${event._id}`,
+    `${baseURL}/update/${tripId}/${eventId}`,
     event,
     config
   )
   return req.data
 }
 
-const add_payers = async (trip, event, payersArr) => {
+const add_payers = async (tripId, eventId, payersArr) => {
   const config = {
     headers: { Authorization: token },
   }
   const req = await axios.put(
-    `${baseURL}/add_payers/${trip._id}/${event._id}`,
+    `${baseURL}/add_payers/${tripId}/${eventId}`,
     payersArr,
     config
   )
   return req.data
 }
 
-const delete_event = async (trip, event) => {
+const delete_event = async (tripId, eventId) => {
   const config = {
     headers: { Authorization: token },
   }
   const req = await axios.delete(
-    `${baseURL}/delete/${trip._id}/${event._id}`,
+    `${baseURL}/delete/${tripId}/${eventId}`,
     config
   )
   return req.data

@@ -8,8 +8,8 @@ const get_all_users = async () => {
   return req.data
 }
 
-const get_user = async (id) => {
-  const req = await axios.get(`${baseURL}/${id}`)
+const get_user = async (userId) => {
+  const req = await axios.get(`${baseURL}/${userId}`)
   return req.data
 }
 
@@ -18,28 +18,28 @@ const create_user = async (user) => {
   return req.data
 }
 
-const update_user = async (user) => {
+const update_user = async (userId, user) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.put(`${baseURL}/update/${user._id}`, user, config)
+  const req = await axios.put(`${baseURL}/update/${userId}`, user, config)
   return req.data
 }
 
-const add_friend = async (friend) => {
+const add_friend = async (friendId) => {
   const config = {
     headers: { Authorization: token },
   }
-  const req = await axios.put(`${baseURL}/add_friend/${friend._id}`, {}, config)
+  const req = await axios.put(`${baseURL}/add_friend/${friendId}`, {}, config)
   return req.data
 }
 
-const remove_friend = async (friend) => {
+const remove_friend = async (friendId) => {
   const config = {
     headers: { Authorization: token },
   }
   const req = await axios.put(
-    `${baseURL}/remove_friend/${friend._id}`,
+    `${baseURL}/remove_friend/${friendId}`,
     {},
     config
   )
