@@ -27,6 +27,12 @@ const CreateUserForm = () => {
     } catch (error) {
       console.log(error)
     }
+    
+    setFirstName('')
+    setLastName('')
+    setEmail('')
+    setUsername('')
+    setPassword('')
   }
 
   return (
