@@ -10,7 +10,7 @@ import {
 
 const tripSlice = createSlice({
   name: 'trips',
-  initialState: [trips, selectedTrip],
+  initialState: [],
   reducers: {
     createTrip(state, action) {
       const trip = action.payload
@@ -44,7 +44,7 @@ const tripSlice = createSlice({
 })
 
 export const { updateTrip, appendTrip, setTrips, removeTrip } =
-  blogSlice.actions
+  tripSlice.actions
 
 export const initializeTrips = () => {
   return async (dispatch) => {

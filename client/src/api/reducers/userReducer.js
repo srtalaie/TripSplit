@@ -11,7 +11,7 @@ import {
 
 const userSlice = createSlice({
   name: 'users',
-  initialState: [users, signedInUser],
+  initialState: [],
   reducers: {
     setUsers(state, action) {
       return action.payload
@@ -39,7 +39,7 @@ export const initializeUsers = () => {
   }
 }
 
-export const createUser = (user) => {
+export const createAUser = (user) => {
   return async (dispatch) => {
     const newUser = await create_user(user)
     dispatch(appendUser(newUser))
