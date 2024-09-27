@@ -15,11 +15,11 @@ const CreateUserForm = () => {
     event.preventDefault()
 
     const newUser = {
-      firstName,
-      lastName,
-      username,
-      email,
-      password,
+      first_name: firstName,
+      last_name: lastName,
+      username: username,
+      email: email,
+      password: password,
     }
 
     try {
