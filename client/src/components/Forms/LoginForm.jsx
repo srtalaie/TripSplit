@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 
+import UserInput from '../Input/UserInput'
+
 const LoginForm = ({ handleLogin }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -22,25 +24,21 @@ const LoginForm = ({ handleLogin }) => {
   return (
     <div>
       <form onSubmit={onLogin}>
-        <label for="email">Email:</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
+        <UserInput
           value={email}
+          type="email"
+          identifier="email"
           label="Email"
-          onChange={({ target }) => setEmail(target.value)}
+          handleChange={({ target }) => setEmail(target.value)}
         />
-        <label for="password">Password:</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
+        <UserInput
           value={password}
+          type="password"
+          identifier="password"
           label="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-        <button type="submit">Login</button>
+          handleChange={({ target }) => setPassword(target.value)}
+        />   
+        <Button type="submit" callToAction="Login" />
       </form>
     </div>
   )

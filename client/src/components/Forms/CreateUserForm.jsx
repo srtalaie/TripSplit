@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createAUser } from '../../api/reducers/userReducer'
 
+import Button from '../Buttons/Button'
+import UserInput from '../Input/UserInput'
+
 const CreateUserForm = () => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -37,53 +40,43 @@ const CreateUserForm = () => {
 
   return (
     <div>
-      <form onSubmit={handleUserCreate}>
-        <label for="firstName">First Name:</label>
-        <input
-          type="text"
-          name="firstName"
+      <form className='flexw-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4' onSubmit={handleUserCreate}>
+        <UserInput
           value={firstName}
-          id="firstName"
+          type="text"
+          identifier="firstName"
           label="First Name"
-          onChange={({ target }) => setFirstName(target.value)}
+          handleChange={({ target }) => setFirstName(target.value)}
         />
-        <label for="lastName">Last Name:</label>
-        <input
-          type="text"
-          name="lastName"
+        <UserInput
           value={lastName}
-          id="lastName"
-          label="Last Name"
-          onChange={({ target }) => setLastName(target.value)}
-        />
-        <label for="username">Username:</label>
-        <input
           type="text"
-          name="username"
+          identifier="lastName"
+          label="Last Name"
+          handleChange={({ target }) => setLastName(target.value)}
+        />
+        <UserInput
           value={username}
-          id="username"
+          type="text"
+          identifier="username"
           label="Username"
-          onChange={({ target }) => setUsername(target.value)}
+          handleChange={({ target }) => setUsername(target.value)}
         />
-        <label for="email">Email:</label>
-        <input
-          type="email"
-          name="email"
+        <UserInput
           value={email}
-          id="email"
+          type="email"
+          identifier="email"
           label="Email"
-          onChange={({ target }) => setEmail(target.value)}
+          handleChange={({ target }) => setEmail(target.value)}
         />
-        <label for="password">Password:</label>
-        <input
-          type="password"
-          name="password"
+        <UserInput
           value={password}
-          id="password"
+          type="password"
+          identifier="password"
           label="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-        <button type="submit">Create User</button>
+          handleChange={({ target }) => setPassword(target.value)}
+        />   
+        <Button type="submit" callToAction="Create User" />
       </form>
     </div>
   )
