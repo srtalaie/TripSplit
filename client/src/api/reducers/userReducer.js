@@ -53,23 +53,23 @@ export const createAUser = (user) => {
   }
 }
 
-export const updateAUser = (userId, user) => {
+export const updateAUser = (userId, user, token) => {
   return async (dispatch) => {
-    const updatedUser = await update_user(userId, user)
+    const updatedUser = await update_user(userId, user, token)
     dispatch(updateUser(updatedUser))
   }
 }
 
-export const addFriend = (friendId) => {
+export const addFriend = (friendId, token) => {
   return async (dispatch) => {
-    const updatedUser = await add_friend(friendId)
+    const updatedUser = await add_friend(friendId, token)
     dispatch(updateUser(updatedUser))
   }
 }
 
-export const removeFriend = (friendId) => {
+export const removeFriend = (friendId, token) => {
   return async (dispatch) => {
-    const updatedUser = await remove_friend(friendId)
+    const updatedUser = await remove_friend(friendId, token)
     dispatch(updateUser(updatedUser))
   }
 }

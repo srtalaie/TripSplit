@@ -53,37 +53,37 @@ export const initializeTrips = () => {
   }
 }
 
-export const getATrip = (tripId) => {
+export const getATrip = (tripId, token) => {
   return async (dispatch) => {
-    const foundTrip = await get_trip(tripId)
+    const foundTrip = await get_trip(tripId, token)
     dispatch(getTrip(foundTrip))
   }
 }
 
-export const createATrip = (trip) => {
+export const createATrip = (trip, token) => {
   return async (dispatch) => {
-    const newTrip = await create_trip(trip)
+    const newTrip = await create_trip(trip, token)
     dispatch(appendTrip(newTrip))
   }
 }
 
-export const updateATrip = (tripId, trip) => {
+export const updateATrip = (tripId, trip, token) => {
   return async (dispatch) => {
-    const updatedTrip = await update_trip(tripId, trip)
+    const updatedTrip = await update_trip(tripId, trip, token)
     dispatch(updateTrip(updatedTrip))
   }
 }
 
-export const addAMember = (tripId, memberId) => {
+export const addAMember = (tripId, memberId, token) => {
   return async (dispatch) => {
-    const updatedTrip = await add_member(tripId, memberId)
+    const updatedTrip = await add_member(tripId, memberId, token)
     dispatch(updateTrip(updatedTrip))
   }
 }
 
-export const removeATrip = (tripId) => {
+export const removeATrip = (tripId, token) => {
   return async (dispatch) => {
-    await delete_trip(tripId)
+    await delete_trip(tripId, token)
     dispatch(removeTrip(tripId))
   }
 }

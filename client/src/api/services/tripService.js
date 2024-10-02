@@ -1,14 +1,12 @@
 import axios from 'axios'
 const baseURL = '/api/trips'
 
-let token = null
-
 const get_all_trips = async () => {
   const req = await axios.get(baseURL)
   return req.data
 }
 
-const get_trip = async (tripId) => {
+const get_trip = async (tripId, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -16,7 +14,7 @@ const get_trip = async (tripId) => {
   return req.data
 }
 
-const create_trip = async (trip) => {
+const create_trip = async (trip, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -24,7 +22,7 @@ const create_trip = async (trip) => {
   return req.data
 }
 
-const update_trip = async (tripId, trip) => {
+const update_trip = async (tripId, trip, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -32,7 +30,7 @@ const update_trip = async (tripId, trip) => {
   return req.data
 }
 
-const add_member = async (tripId, memberId) => {
+const add_member = async (tripId, memberId, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -44,7 +42,7 @@ const add_member = async (tripId, memberId) => {
   return req.data
 }
 
-const delete_trip = async (tripId) => {
+const delete_trip = async (tripId, token) => {
   const config = {
     headers: { Authorization: token },
   }

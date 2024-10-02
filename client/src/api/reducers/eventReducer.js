@@ -55,44 +55,44 @@ export const {
   getEvent,
 } = eventSlice.actions
 
-export const getAllEvents = (tripId) => {
+export const getAllEvents = (tripId, token) => {
   return async (dispatch) => {
-    const events = await get_all_events(tripId)
+    const events = await get_all_events(tripId, token)
     dispatch(setEvents(events))
   }
 }
 
-export const getAEvent = (tripId, eventId) => {
+export const getAEvent = (tripId, eventId, token) => {
   return async (dispatch) => {
-    const foundEvent = await get_event(tripId, eventId)
+    const foundEvent = await get_event(tripId, eventId, token)
     dispatch(getEvent(foundEvent))
   }
 }
 
-export const createAnEvent = (tripId, event) => {
+export const createAnEvent = (tripId, event, token) => {
   return async (dispatch) => {
-    const newEvent = await create_event(tripId, event)
+    const newEvent = await create_event(tripId, event, token)
     dispatch(appendEvent(newEvent))
   }
 }
 
-export const updateAnEvent = (tripId, eventId, event) => {
+export const updateAnEvent = (tripId, eventId, event, token) => {
   return async (dispatch) => {
-    const updatedEvent = await update_event(tripId, eventId, event)
+    const updatedEvent = await update_event(tripId, eventId, event, token)
     dispatch(updateEvent(updatedEvent))
   }
 }
 
-export const addPayers = (tripId, eventId, payersArr) => {
+export const addPayers = (tripId, eventId, payersArr, token) => {
   return async (dispatch) => {
-    const updatedEvent = await add_payers(tripId, eventId, payersArr)
+    const updatedEvent = await add_payers(tripId, eventId, payersArr, token)
     dispatch(updateEvent(updatedEvent))
   }
 }
 
-export const deleteAnEvent = (tripId, eventId) => {
+export const deleteAnEvent = (tripId, eventId, token) => {
   return async (dispatch) => {
-    await delete_event(tripId, eventId)
+    await delete_event(tripId, eventId, token)
     dispatch(removeEvent(eventId))
   }
 }

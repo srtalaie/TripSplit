@@ -1,9 +1,7 @@
 import axios from 'axios'
 const baseURL = '/api/events'
 
-let token = null
-
-const get_all_events = async (tripId) => {
+const get_all_events = async (tripId, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -11,7 +9,7 @@ const get_all_events = async (tripId) => {
   return req.data
 }
 
-const get_event = async (tripId, eventId) => {
+const get_event = async (tripId, eventId, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -19,7 +17,7 @@ const get_event = async (tripId, eventId) => {
   return req.data
 }
 
-const create_event = async (tripId, event) => {
+const create_event = async (tripId, event, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -27,7 +25,7 @@ const create_event = async (tripId, event) => {
   return req.data
 }
 
-const update_event = async (tripId, eventId, event) => {
+const update_event = async (tripId, eventId, event, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -39,7 +37,7 @@ const update_event = async (tripId, eventId, event) => {
   return req.data
 }
 
-const add_payers = async (tripId, eventId, payersArr) => {
+const add_payers = async (tripId, eventId, payersArr, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -51,7 +49,7 @@ const add_payers = async (tripId, eventId, payersArr) => {
   return req.data
 }
 
-const delete_event = async (tripId, eventId) => {
+const delete_event = async (tripId, eventId, token) => {
   const config = {
     headers: { Authorization: token },
   }

@@ -1,7 +1,6 @@
 import axios from 'axios'
-const baseURL = '/api/users'
 
-let token = null
+const baseURL = '/api/users'
 
 const get_all_users = async () => {
   const req = await axios.get(baseURL)
@@ -18,7 +17,7 @@ const create_user = async (user) => {
   return req.data
 }
 
-const update_user = async (userId, user) => {
+const update_user = async (userId, user, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -26,7 +25,7 @@ const update_user = async (userId, user) => {
   return req.data
 }
 
-const add_friend = async (friendId) => {
+const add_friend = async (friendId, token) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -34,7 +33,7 @@ const add_friend = async (friendId) => {
   return req.data
 }
 
-const remove_friend = async (friendId) => {
+const remove_friend = async (friendId, token) => {
   const config = {
     headers: { Authorization: token },
   }

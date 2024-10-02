@@ -1,10 +1,9 @@
 import axios from 'axios'
 const baseURL = '/api/users'
 
-let token = null
-
 const setToken = (newToken) => {
-  token = `bearer ${newToken}`
+  let token = `bearer ${newToken}`
+  return token
 }
 
 const login = async (creds) => {
