@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 const baseURL = '/api/users'
 
 const get_all_users = async () => {

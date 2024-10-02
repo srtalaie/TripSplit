@@ -9,10 +9,15 @@ import {
   update_user,
 } from '../services/userService'
 
+import { login } from '../services/loginService'
+
 const userSlice = createSlice({
   name: 'users',
   initialState: [],
   reducers: {
+    setLoggedInUser(state, action) {
+      return action.payload
+    },
     setUsers(state, action) {
       return action.payload
     },
@@ -30,12 +35,20 @@ const userSlice = createSlice({
   },
 })
 
-export const { setUsers, appendUser, getUser, updateUser } = userSlice.actions
+export const { setLoggedInUser, setUsers, appendUser, getUser, updateUser } =
+  userSlice.actions
 
 export const initializeUsers = () => {
   return async (dispatch) => {
     const users = await get_all_users()
     dispatch(setUsers(users))
+  }
+}
+
+export const loginUser = (creds) => {
+  return async (dispatch) => {
+    const user = await login(creds)
+    dispatch(setLoggedInUser(user))
   }
 }
 
