@@ -1,11 +1,11 @@
 import './App.css'
-import LoginPage from './Pages/LoginPage'
+import NavBar from './components/Navs/NavBar'
 
 function App() {
 
   return (
     <>
-      <LoginPage />
+      <NavBar />
     </>
   )
 }
