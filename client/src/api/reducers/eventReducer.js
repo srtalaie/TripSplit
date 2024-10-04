@@ -8,9 +8,14 @@ import {
   update_event,
 } from '../services/eventService'
 
+const initialState = {
+  selectedEvent: {},
+  events: [],
+}
+
 const eventSlice = createSlice({
   name: 'events',
-  initialState: [],
+  initialState,
   reducers: {
     createEvent(state, action) {
       const event = action.payload
@@ -55,44 +60,44 @@ export const {
   getEvent,
 } = eventSlice.actions
 
-export const getAllEvents = (tripId, token) => {
+export const getAllEvents = (tripId) => {
   return async (dispatch) => {
-    const events = await get_all_events(tripId, token)
+    const events = await get_all_events(tripId)
     dispatch(setEvents(events))
   }
 }
 
-export const getAEvent = (tripId, eventId, token) => {
+export const getAEvent = (tripId, eventId) => {
   return async (dispatch) => {
-    const foundEvent = await get_event(tripId, eventId, token)
+    const foundEvent = await get_event(tripId, eventId)
     dispatch(getEvent(foundEvent))
   }
 }
 
-export const createAnEvent = (tripId, event, token) => {
+export const createAnEvent = (tripId, event) => {
   return async (dispatch) => {
-    const newEvent = await create_event(tripId, event, token)
+    const newEvent = await create_event(tripId, event)
     dispatch(appendEvent(newEvent))
   }
 }
 
-export const updateAnEvent = (tripId, eventId, event, token) => {
+export const updateAnEvent = (tripId, eventId, event) => {
   return async (dispatch) => {
-    const updatedEvent = await update_event(tripId, eventId, event, token)
+    const updatedEvent = await update_event(tripId, eventId, event)
     dispatch(updateEvent(updatedEvent))
   }
 }
 
-export const addPayers = (tripId, eventId, payersArr, token) => {
+export const addPayers = (tripId, eventId, payersArr) => {
   return async (dispatch) => {
-    const updatedEvent = await add_payers(tripId, eventId, payersArr, token)
+    const updatedEvent = await add_payers(tripId, eventId, payersArr)
     dispatch(updateEvent(updatedEvent))
   }
 }
 
-export const deleteAnEvent = (tripId, eventId, token) => {
+export const deleteAnEvent = (tripId, eventId) => {
   return async (dispatch) => {
-    await delete_event(tripId, eventId, token)
+    await delete_event(tripId, eventId)
     dispatch(removeEvent(eventId))
   }
 }

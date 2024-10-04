@@ -1,12 +1,11 @@
 import './App.css'
-import CreateUserForm from './components/Forms/CreateUserForm'
-
+import LoginPage from './Pages/LoginPage'
 
 function App() {
-  
+
   return (
     <>
-      <CreateUserForm />
+      <LoginPage />
     </>
   )
 }

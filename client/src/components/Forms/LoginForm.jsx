@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 
+import Button from '../Buttons/Button'
 import UserInput from '../Input/UserInput'
 
 const LoginForm = ({ handleLogin }) => {

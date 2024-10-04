@@ -8,9 +8,14 @@ import {
   update_trip,
 } from '../services/tripService'
 
+const initialState = {
+  selectedTrip: {},
+  trips: [],
+}
+
 const tripSlice = createSlice({
   name: 'trips',
-  initialState: [],
+  initialState,
   reducers: {
     createTrip(state, action) {
       const trip = action.payload
@@ -53,37 +58,37 @@ export const initializeTrips = () => {
   }
 }
 
-export const getATrip = (tripId, token) => {
+export const getATrip = (tripId) => {
   return async (dispatch) => {
-    const foundTrip = await get_trip(tripId, token)
+    const foundTrip = await get_trip(tripId)
     dispatch(getTrip(foundTrip))
   }
 }
 
-export const createATrip = (trip, token) => {
+export const createATrip = (trip) => {
   return async (dispatch) => {
-    const newTrip = await create_trip(trip, token)
+    const newTrip = await create_trip(trip)
     dispatch(appendTrip(newTrip))
   }
 }
 
-export const updateATrip = (tripId, trip, token) => {
+export const updateATrip = (tripId, trip) => {
   return async (dispatch) => {
-    const updatedTrip = await update_trip(tripId, trip, token)
+    const updatedTrip = await update_trip(tripId, trip)
     dispatch(updateTrip(updatedTrip))
   }
 }
 
-export const addAMember = (tripId, memberId, token) => {
+export const addAMember = (tripId, memberId) => {
   return async (dispatch) => {
-    const updatedTrip = await add_member(tripId, memberId, token)
+    const updatedTrip = await add_member(tripId, memberId)
     dispatch(updateTrip(updatedTrip))
   }
 }
 
-export const removeATrip = (tripId, token) => {
+export const removeATrip = (tripId) => {
   return async (dispatch) => {
-    await delete_trip(tripId, token)
+    await delete_trip(tripId)
     dispatch(removeTrip(tripId))
   }
 }

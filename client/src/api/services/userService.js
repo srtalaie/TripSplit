@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { authHeader } from './loginService'
 const baseURL = '/api/users'
 
 const get_all_users = async () => {
@@ -16,25 +17,25 @@ const create_user = async (user) => {
   return req.data
 }
 
-const update_user = async (userId, user, token) => {
+const update_user = async (userId, user) => {
   const config = {
-    headers: { Authorization: token },
+    headers: authHeader(),
   }
   const req = await axios.put(`${baseURL}/update/${userId}`, user, config)
   return req.data
 }
 
-const add_friend = async (friendId, token) => {
+const add_friend = async (friendId) => {
   const config = {
-    headers: { Authorization: token },
+    headers: authHeader(),
   }
   const req = await axios.put(`${baseURL}/add_friend/${friendId}`, {}, config)
   return req.data
 }
 
-const remove_friend = async (friendId, token) => {
+const remove_friend = async (friendId) => {
   const config = {
-    headers: { Authorization: token },
+    headers: authHeader(),
   }
   const req = await axios.put(
     `${baseURL}/remove_friend/${friendId}`,
