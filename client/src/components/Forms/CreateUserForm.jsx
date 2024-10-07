@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createAUser } from '../../api/reducers/userReducer'
 
-import Button from '../Buttons/Button'
+import FormButton from '../Buttons/FormButton'
 import UserInput from '../Input/UserInput'
 
 const CreateUserForm = () => {
@@ -76,7 +76,7 @@ const CreateUserForm = () => {
           label="Password"
           handleChange={({ target }) => setPassword(target.value)}
         />   
-        <Button type="submit" callToAction="Create User" />
+        <FormButton type="submit" callToAction="Create User" />
       </form>
     </div>
   )

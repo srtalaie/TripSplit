@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 
-import Button from '../Buttons/Button'
+import FormButton from '../Buttons/FormButton'
 import UserInput from '../Input/UserInput'
 
 const LoginForm = ({ handleLogin }) => {
@@ -39,7 +39,7 @@ const LoginForm = ({ handleLogin }) => {
           label="Password"
           handleChange={({ target }) => setPassword(target.value)}
         />   
-        <Button type="submit" callToAction="Login" />
+        <FormButton type="submit" callToAction="Login" />
       </form>
     </div>
   )
