@@ -1,22 +1,11 @@
+import LogoutButton from "../Buttons/LogoutButton"
 
-import { useSignedInUser } from "../../hooks/useSignedInUser"
-import LoginPage from '../../Pages/LoginPage'
-import LogoutButton from '../Buttons/LogoutButton'
-
-const NavBar = () => {
-  const signedInUser = useSignedInUser()
+const NavBar = ({ handleLogout }) => {
   return (
-    <div>
-      {window.localStorage.getItem('loggedInUser') ? (
-        <LogoutButton />
-      ): (
-        <div>
-          <LoginPage />
-          <LogoutButton />
-        </div>
-        
-      )}
-    </div>
+  <div>
+      <LogoutButton handleLogout={handleLogout} />
+  </div>
+
   )
 }
 
