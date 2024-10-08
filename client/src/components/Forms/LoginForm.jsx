@@ -23,25 +23,23 @@ const LoginForm = ({ handleLogin }) => {
   }
 
   return (
-    <div>
-      <form onSubmit={onLogin}>
-        <UserInput
-          value={email}
-          type="email"
-          identifier="email"
-          label="Email"
-          handleChange={({ target }) => setEmail(target.value)}
-        />
-        <UserInput
-          value={password}
-          type="password"
-          identifier="password"
-          label="Password"
-          handleChange={({ target }) => setPassword(target.value)}
-        />   
-        <FormButton type="submit" callToAction="Login" />
-      </form>
-    </div>
+    <form className=" max-w-sm mx-auto" onSubmit={onLogin}>
+      <UserInput
+        value={email}
+        type="email"
+        identifier="email"
+        label="Email"
+        handleChange={({ target }) => setEmail(target.value)}
+      />
+      <UserInput
+        value={password}
+        type="password"
+        identifier="password"
+        label="Password"
+        handleChange={({ target }) => setPassword(target.value)}
+      />
+      <FormButton type="submit" callToAction="Login" />
+    </form>
   )
 }
 

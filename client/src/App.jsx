@@ -6,20 +6,24 @@ import './App.css'
 
 import { loginUser, logoutAUser } from "./api/reducers/userReducer"
 
-import LoginButton from './components/Buttons/LoginButton'
+import LoginSignUpNav from './components/Navs/LoginSignUpNav'
 import NavBar from './components/Navs/NavBar'
+import AddFriendsPage from './Pages/AddFriendsPage'
+import CreateUser from './Pages/CreateUser'
 import Home from './Pages/Home'
 import LoginPage from './Pages/LoginPage'
 import LogoutPage from './Pages/LogoutPage'
+import MyTripsPage from './Pages/MyTripsPage'
+import Profile from './Pages/Profile'
 
 function App() {
   const [userCheck, setUserCheck] = useState(false)
-  
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  
+
   useEffect(() => {
-    const loggedInUserJSON  = window.localStorage.getItem('loggedInUser')
+    const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedInUserJSON) {
       setUserCheck(true)
     }
@@ -44,13 +48,17 @@ function App() {
   return (
     <>
       {userCheck === true ? (
-          <NavBar handleLogout={handleLogout} />
-      ): (   
-          <LoginButton />
+        <NavBar handleLogout={handleLogout} />
+      ) : (
+        <LoginSignUpNav />
       )}
-      
+
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/friends" element={<AddFriendsPage />} />
+        <Route path="/create-user" element={<CreateUser />} />
+        <Route path="/trips" element={<MyTripsPage />} />
         <Route path='/login' element={<LoginPage handleLogin={handleLogin} />} />
         <Route path='/logout' element={<LogoutPage />} />
       </Routes>

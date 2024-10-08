@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 
 const LogoutButton = ({ handleLogout }) => {
   return (
-    <button className='rounded-lg border-slate-500 bg-red-300 hover:bg-red-500 py-2 px-4 font-bold' onClick={handleLogout}>Logout</button>
+    <button className='rounded-lg border-slate-500 bg-red-300 hover:bg-red-500 px-2.5 py-0.5' onClick={handleLogout}>Logout</button>
   )
 }
 
