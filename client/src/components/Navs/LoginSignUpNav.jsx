@@ -9,9 +9,9 @@ const LoginSignUpNav = () => {
   }
 
   return (
-    <nav className="bg-black text-white max-w-screen-xl flex flex-wrap items-center justify-end mx-auto p-4">
+    <nav className="bg-black text-white flex flex-wrap items-center justify-end mx-auto p-4">
       {/* Desktop Navigation */}
-      <div className="hidden w-full md:block md:w-auto" id="navbar-default">
+      <div className="hidden w-full md:static absolute md:block md:w-auto" id="navbar-default">
         <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0">
           <li>
             <Link className="rounded-lg border-slate-500 bg-green-300 hover:bg-green-500 px-2.5 py-0.5" to="/login">Login</Link>
