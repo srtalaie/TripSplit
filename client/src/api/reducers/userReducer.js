@@ -31,8 +31,8 @@ const userSlice = createSlice({
     },
     getUser(state, action) {
       const user = action.payload
-      const id = user.id
-      return state.users.filter((user) => user._id !== id)
+      const id = user._id
+      return state.users.filter((user) => user._id === id)
     },
     updateUser(state, action) {
       const updatedUser = action.payload

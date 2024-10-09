@@ -88,7 +88,9 @@ exports.login_user = [
           id: user._id,
         }
         const token = jwt.sign(userInfoForToken, process.env.SECRET)
-        return res.status(200).send({ token: token, email: user.email })
+        return res
+          .status(200)
+          .send({ token: token, email: user.email, id: user._id })
       })(req, res, next)
     }
   }),

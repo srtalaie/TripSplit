@@ -1,6 +1,10 @@
+import CreateUserForm from "../components/Forms/CreateUserForm"
+
 const CreateUser = () => {
   return (
-    <div>CreateUser</div>
+    <div>
+      <CreateUserForm />
+    </div>
   )
 }
 
