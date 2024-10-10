@@ -53,6 +53,9 @@ tripSchema.virtual('url').get(function () {
   return `/trips/${this._id}`
 })
 
+tripSchema.set('toObject', { virtuals: true })
+tripSchema.set('toJSON', { virtuals: true })
+
 const Trip = mongoose.model('Trip', tripSchema)
 
 module.exports = Trip

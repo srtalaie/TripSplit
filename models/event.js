@@ -47,6 +47,9 @@ eventSchema.virtual('url').get(function () {
   return `/events/${this._id}`
 })
 
+eventSchema.set('toObject', { virtuals: true })
+eventSchema.set('toJSON', { virtuals: true })
+
 const Event = mongoose.model('Event', eventSchema)
 
 module.exports = Event

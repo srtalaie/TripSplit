@@ -51,6 +51,14 @@ userSchema.virtual('url').get(function () {
   return `/users/${this._id}`
 })
 
+//Virtual for User's Full Name
+userSchema.virtual('full_name').get(function () {
+  return `${this.first_name} ${this.last_name}`
+})
+
+userSchema.set('toObject', { virtuals: true })
+userSchema.set('toJSON', { virtuals: true })
+
 const User = mongoose.model('User', userSchema)
 
 module.exports = User

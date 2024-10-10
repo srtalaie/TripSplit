@@ -1,19 +1,39 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
+
+import { createATrip } from "../../api/reducers/tripReducer"
 
 import FormButton from "../Buttons/FormButton"
-import FriendDropdown from "../Dropdowns/FriendDropdown"
+import UserDropdown from "../Dropdowns/UserDropdown"
 import UserInput from "../Input/UserInput"
 
-const CreateTripForm = ({ handleTripCreate, handleFriendSelect }) => {
+const CreateTripForm = ({ owner, members }) => {
   const [tripName, setTripName] = useState('')
   const [tripDesc, setTripDesc] = useState('')
   const [friendArr, setFriendArr] = useState([])
+  const [selectedMember, setSelectedMember] = useState([])
+
+  const dispatch = useDispatch()
 
   const handleTripCreate = () => {
-    handleTripCreate()
+    const newTrip = {
+      trip_name: tripName,
+      trip_description: tripDesc,
+      owner: owner
+    }
+
+    try {
+      dispatch(createATrip(newTrip))
+    } catch (error) {
+      console.log(error)
+    }
 
     setTripName('')
     setTripDesc('')
+  }
+
+  const handleFriendSelect = (e) => {
+
   }
 
   return (
@@ -35,7 +55,7 @@ const CreateTripForm = ({ handleTripCreate, handleFriendSelect }) => {
       {friendArr.length === 0 ? (
         <p>You must have friends to add members to the trip.</p>
       ) : (
-        <FriendDropdown friendArr={friendArr} handleFriendSelect={handleFriendSelect} />
+        <UserDropdown userArr={members} handleSelect={handleFriendSelect} />
       )}
       <FormButton type="submit" callToAction="Create Trip" />
     </form>

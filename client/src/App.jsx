@@ -4,8 +4,9 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 
 import './App.css'
 
-import { loginUser, logoutAUser } from "./api/reducers/userReducer"
+import { initializeUsers, loginUser, logoutAUser } from "./api/reducers/userReducer"
 
+import { initializeTrips } from './api/reducers/tripReducer'
 import LoginSignUpNav from './components/Navs/LoginSignUpNav'
 import NavBar from './components/Navs/NavBar'
 import AddFriendsPage from './Pages/AddFriendsPage'
@@ -23,6 +24,11 @@ function App() {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    dispatch(initializeUsers())
+    dispatch(initializeTrips())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
