@@ -201,7 +201,7 @@ exports.update_user = [
           'Password must be at least 8 characters long, contain an upper and lower case character, and contain at least 1 special character and 1 number'
         ),
     ],
-    { message: 'Please provide an updated details.' }
+    { message: 'Please provide an update.' }
   ),
 
   // Process after validation
@@ -216,7 +216,7 @@ exports.update_user = [
     const oldUser = await User.findById(req.params.id).exec()
 
     if (req.body.username || req.body.email || req.body.phone_number) {
-      // Check to see if email, username, or phone number is already in use or if there any additional errors
+      // Check to see if email, username, or phone number is already in use
       const [existingUsername, existingEmailAddress, existingPhoneNumber] =
         await Promise.all([
           User.findOne({ username: req.body.username }).exec(),
