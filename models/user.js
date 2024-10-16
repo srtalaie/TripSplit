@@ -28,6 +28,15 @@ const userSchema = new mongoose.Schema({
       message: 'Please enter a valid email',
     },
   },
+  phone_number: {
+    type: String,
+    trim: true,
+    unique: true,
+    required: true,
+    minLength: [10, 'Should have at least 10 digits'],
+    maxLength: [10, 'Should have no more than 10 digits'],
+    match: [/\d{10}/, 'Please enter a valid phone number'],
+  },
   password_hash: {
     type: String,
     required: true,

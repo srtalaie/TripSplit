@@ -12,6 +12,8 @@ const CreateUserForm = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+
 
   const dispatch = useDispatch()
 
@@ -23,6 +25,7 @@ const CreateUserForm = () => {
       last_name: lastName,
       username: username,
       email: email,
+      phone_number: phoneNumber,
       password: password,
     }
 
@@ -37,6 +40,7 @@ const CreateUserForm = () => {
     setEmail('')
     setUsername('')
     setPassword('')
+    setPhoneNumber('')
   }
 
   return (
@@ -69,6 +73,13 @@ const CreateUserForm = () => {
           identifier="email"
           label="Email"
           handleChange={({ target }) => setEmail(target.value)}
+        />
+        <UserInput
+          value={phoneNumber}
+          type="tel"
+          identifier="phoneNumber"
+          label="Phone Number"
+          handleChange={({ target }) => setPhoneNumber(target.value)}
         />
         <UserInput
           value={password}

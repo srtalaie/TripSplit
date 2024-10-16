@@ -30,6 +30,12 @@ exports.create_user = [
     .escape()
     .isEmail()
     .withMessage('Must provide a valid email.'),
+  body('phone_number')
+    .trim()
+    .escape()
+    .isLength({ min: 10, max: 10 })
+    .isNumeric()
+    .withMessage('Please provide a valid phone number'),
   body('password')
     .trim()
     .escape()
@@ -49,7 +55,8 @@ exports.create_user = [
     // Extract errors from validation
     const errors = validationResult(req)
 
-    const { first_name, last_name, username, email, password } = req.body
+    const { first_name, last_name, username, email, password, phone_number } =
+      req.body
 
     // Hash passowrd
     const saltRounds = 10
@@ -61,18 +68,21 @@ exports.create_user = [
       username: username,
       email: email,
       password_hash: password_hash,
+      phone_number: phone_number,
     })
 
-    // Check to see if email or username is already in use or if there any additional errors
-    const [existingUsername, existingEmailAddress] = await Promise.all([
-      User.findOne({ username: username }).exec(),
-      User.findOne({ email: email }).exec(),
-    ])
+    // Check to see if email, username, or phone number is already in use or if there any additional errors
+    const [existingUsername, existingEmailAddress, existingPhoneNumber] =
+      await Promise.all([
+        User.findOne({ username: username }).exec(),
+        User.findOne({ email: email }).exec(),
+        User.findOne({ phone_number: phone_number }).exec(),
+      ])
 
-    if (existingUsername || existingEmailAddress) {
+    if (existingUsername || existingEmailAddress || existingPhoneNumber) {
       return res
         .status(409)
-        .send({ message: 'Username or Email already exists.' })
+        .send({ message: 'Username, Email, or Phone Number already exists.' })
     }
 
     if (!errors.isEmpty()) {
@@ -171,6 +181,12 @@ exports.update_user = [
         .escape()
         .isEmail()
         .withMessage('Must provide a valid email.'),
+      body('phone_number')
+        .trim()
+        .escape()
+        .isLength({ min: 10, max: 10 })
+        .isNumeric()
+        .withMessage('Please provide a valid phone number'),
       body('password')
         .trim()
         .escape()
@@ -199,6 +215,22 @@ exports.update_user = [
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
     const oldUser = await User.findById(req.params.id).exec()
 
+    if (req.body.username || req.body.email || req.body.phone_number) {
+      // Check to see if email, username, or phone number is already in use or if there any additional errors
+      const [existingUsername, existingEmailAddress, existingPhoneNumber] =
+        await Promise.all([
+          User.findOne({ username: req.body.username }).exec(),
+          User.findOne({ email: req.body.email }).exec(),
+          User.findOne({ phone_number: req.body.phone_number }).exec(),
+        ])
+
+      if (existingUsername || existingEmailAddress || existingPhoneNumber) {
+        return res
+          .status(409)
+          .send({ message: 'Username, Email, or Phone Number already exists.' })
+      }
+    }
+
     if (!decodedToken) {
       return res.status(401).send({ message: 'Token missing or invalid.' })
     } else if (oldUser.email !== decodedToken.email) {
@@ -225,6 +257,9 @@ exports.update_user = [
         friends: oldUser.friends,
         trips: oldUser.trips,
         _id: oldUser._id,
+        phone_number: !req.body.phone_number
+          ? oldUser.phone_number
+          : req.body.phone_number,
       })
 
       await User.findByIdAndUpdate(req.params.id, user)
