@@ -1,45 +1,78 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { addFriend } from '../api/reducers/userReducer'
+
 import UserInput from '../components/Input/UserInput'
 
 const AddFriendsPage = () => {
   const [queryText, setQueryText] = useState("")
   const [queryNumber, setQueryNumber] = useState("")
+  const [searchToggle, setSearchToggle] = useState(false)
   const [results, setResults] = useState([])
 
-  const users = useSelector((state) => state.users)
+  const users = useSelector((state) => state.users.users)
+  const dispatch = useDispatch()
 
-
-  //TODO add handleInput for searching by phone number
-  //Add check to see if user is using the phone number field or the name search field
-  const handleUserInput = (e) => {
+  const handleUserNameInput = (e) => {
     setQueryText(e.target.value.toLowerCase())
     const filteredUsers = users.filter((user) => {
       if (queryText === "") {
         return user
       } else {
-        console.log(user);
-
         return user.full_name.toLowerCase().includes(queryText)
       }
     })
     setResults(filteredUsers)
   }
 
-  const handleSubmit = () => {
+  const handleUserNumberInput = (e) => {
+    setQueryNumber(e.target.value)
+    const filteredUsers = users.filter((user) => {
+      if (queryNumber === "") {
+        return user
+      } else {
+        return user.phone_number.includes(queryNumber)
+      }
+    })
+    setResults(filteredUsers)
+  }
 
+  const handleSearchToggle = () => {
+    setSearchToggle(!searchToggle)
+  }
+
+  const handleSubmit = (e) => {
+    const friendId = e.target.value
+    try {
+      dispatch(addFriend(friendId))
+    } catch (error) {
+      alert("Could not add user, please check to see if the User is already a friend")
+    }
   }
 
   return (
     <div>
-      <h4>Find friends by searching for their name</h4>
-      <UserInput type="text" value={queryText} handleChange={handleUserInput} identifier='search' label='Search' />
-      <UserInput type="tel" value={queryNumber} handleChange={handleUserInput} identifier='search' label='Search' />
+      <h4>Find friends by searching for their name or number</h4>
+      {searchToggle === false ? (
+        <div>
+          <UserInput type="text" value={queryText} handleChange={handleUserNameInput} identifier='search' label='Search Full Name' />
+          <button onClick={handleSearchToggle}>Switch to Phone Number</button>
+        </div>
+      ) : (
+        <div>
+          <UserInput type="tel" value={queryNumber} handleChange={handleUserNumberInput} identifier='search' label='Search Phone Number' />
+          <button onClick={handleSearchToggle}>Switch to Name</button>
+        </div>
+      )}
       {users.length === 0 ? (
-        <div>Something went wrong</div>
+        <div>No users found</div>
       ) : (
         results.map((user) => (
-          <p key={user._id}>{user.full_name}</p>
+          <div key={user._id}>
+            <p>{user.full_name}</p>
+            <button value={user._id} onClick={handleSubmit}>Add Friend</button>
+          </div>
         ))
       )}
     </div>

@@ -22,9 +22,11 @@ const userSlice = createSlice({
   reducers: {
     setLoggedInUser(state, action) {
       state.signedInUser = action.payload
+      return state
     },
     setUsers(state, action) {
-      return action.payload
+      state.users = action.payload
+      return state
     },
     appendUser(state, action) {
       state.users.push(action.payload)
@@ -37,7 +39,10 @@ const userSlice = createSlice({
     updateUser(state, action) {
       const updatedUser = action.payload
       const id = updatedUser._id
-      return state.users.map((user) => (user._id !== id ? user : updatedUser))
+      state.users = state.users.map((user) =>
+        user._id !== id ? user : updatedUser
+      )
+      return state
     },
     logoutUser(state, action) {
       state.signedInUser = {}
