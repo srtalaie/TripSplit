@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const FriendTable = ({ handleRemove, friends }) => {
   return (
@@ -11,12 +11,12 @@ const FriendTable = ({ handleRemove, friends }) => {
       </thead>
       <tbody>
         {friends.length === 0 ? (
-          <div>
-            <p>You do not have any friends yet. Add your <Link to="/friends">friends</Link>!</p>
-          </div>
+          <tr>
+            <td>You do not have any friends yet. Add your <Link to="/friends">friends</Link>!</td>
+          </tr>
         ) : (
           friends.map((friend) => (
-            <tr>
+            <tr key={friend.id}>
               <td>{friend.full_name}</td>
               <td><button id={friend._id} onClick={handleRemove}>Remove Friend?</button></td>
             </tr>
