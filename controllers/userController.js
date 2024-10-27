@@ -305,6 +305,10 @@ exports.remove_friend = asyncHandler(async (req, res, next) => {
     friend.friends = filteredFriendsFriend
     await User.findByIdAndUpdate(decodedToken.id, user)
     await User.findByIdAndUpdate(friend._id, friend)
-    return res.status(201).json(user)
+    const populated_user = await User.findById(decodedToken.id)
+      .populate('trips')
+      .populate('friends')
+      .exec()
+    return res.status(201).json(populated_user)
   }
 })

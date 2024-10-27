@@ -37,11 +37,13 @@ const remove_friend = async (friendId) => {
   const config = {
     headers: authHeader(),
   }
+
   const req = await axios.put(
     `${baseURL}/remove_friend/${friendId}`,
     {},
     config
   )
+
   return req.data
 }
 
