@@ -10,10 +10,6 @@ const Profile = () => {
   const token = JSON.parse(window.localStorage.getItem('loggedInUser'))
   const user = useSelector((state) => state.users.users.find((user) => user._id === token.id))
 
-  // useEffect(() => {
-
-  // }, [])
-
   const handleRemoveFriend = (e) => {
     try {
       const friendId = e.target.id
