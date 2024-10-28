@@ -2,7 +2,9 @@ import { useDispatch, useSelector } from "react-redux"
 
 import { removeFriend } from "../api/reducers/userReducer"
 
+import UserInfoForm from "../components/Forms/UserInfoForm"
 import FriendTable from "../components/Tables/FriendTable"
+import TripTable from "../components/Tables/TripTable"
 
 const Profile = () => {
   const dispatch = useDispatch()
@@ -25,6 +27,8 @@ const Profile = () => {
         friends={user.friends}
         handleRemove={handleRemoveFriend}
       />
+      <TripTable trips={user.trips} />
+      <UserInfoForm />
     </div>
   )
 }

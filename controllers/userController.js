@@ -248,7 +248,7 @@ exports.update_user = [
 
       const user = new User({
         username: req.body.username,
-        email: req.body.email,
+        email: !req.body.email ? oldUser.email : req.body.email,
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         password_hash: !req.body.password

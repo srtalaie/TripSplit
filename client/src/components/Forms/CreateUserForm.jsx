@@ -14,11 +14,10 @@ const CreateUserForm = () => {
   const [password, setPassword] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
 
-
   const dispatch = useDispatch()
 
-  const handleUserCreate = (event) => {
-    event.preventDefault()
+  const handleUserCreate = (e) => {
+    e.preventDefault()
 
     const newUser = {
       first_name: firstName,
