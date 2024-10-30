@@ -30,7 +30,10 @@ const tripSlice = createSlice({
     updateTrip(state, action) {
       const updatedTrip = action.payload
       const id = updatedTrip._id
-      return state.trips.map((trip) => (trip._id !== id ? trip : updatedTrip))
+      state.trips.trips = state.trips.trips.map((trip) =>
+        trip._id !== id ? trip : updatedTrip
+      )
+      return state
     },
     appendTrip(state, action) {
       state.trips.push(action.payload)

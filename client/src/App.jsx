@@ -68,7 +68,7 @@ function App() {
         <Route path="/create-user" element={<CreateUser />} />
         <Route path="/trips" element={<MyTripsPage />} />
         <Route path="/trips/create" element={<CreateTripPage />} />
-        <Route path="/trips/:trip" element={<TripPage />} />
+        <Route path="/trips/:id" element={<TripPage />} />
         <Route path='/login' element={<LoginPage handleLogin={handleLogin} />} />
         <Route path='/logout' element={<LogoutPage />} />
       </Routes>

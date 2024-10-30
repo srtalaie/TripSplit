@@ -1,6 +1,6 @@
 import axios from 'axios'
-const baseURL = '/api/trips'
 import { authHeader } from './loginService'
+const baseURL = '/api/trips'
 
 const get_all_trips = async () => {
   const req = await axios.get(baseURL)
@@ -37,7 +37,7 @@ const add_member = async (tripId, memberId) => {
   }
   const req = await axios.put(
     `${baseURL}/add_member/${tripId}`,
-    memberId,
+    { member_id: memberId },
     config
   )
   return req.data

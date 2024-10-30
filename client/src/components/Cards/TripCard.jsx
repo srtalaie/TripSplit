@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 const TripCard = ({ tripId, tripName, tripDescription, tripOwner, tripURL }) => {
   return (
