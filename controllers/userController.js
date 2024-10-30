@@ -151,7 +151,11 @@ exports.add_friend = asyncHandler(async (req, res, next) => {
     friend.friends = friend.friends.concat(user._id)
     await user.save()
     await friend.save()
-    return res.status(201).json(user)
+    const populated_user = await User.findById(user._id)
+      .populate('friends')
+      .populate('trips')
+      .exec()
+    return res.status(201).json(populated_user)
   }
 })
 

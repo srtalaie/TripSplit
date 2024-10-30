@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { get_user } from '../api/services/userService'
 
 import TripCard from '../components/Cards/TripCard'
 
@@ -13,8 +12,7 @@ const MyTripsPage = () => {
   useEffect(() => {
     const populateUserTrips = async () => {
       if (user) {
-        const userInfo = await get_user(user.id)
-        setTrips(...userInfo.trips)
+        setTrips(user.user_info.trips)
       }
     }
     populateUserTrips()
