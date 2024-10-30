@@ -12,11 +12,16 @@ const AddFriendsPage = () => {
   const [results, setResults] = useState([])
 
   const users = useSelector((state) => state.users.users)
+  const token = JSON.parse(window.localStorage.getItem('loggedInUser'))
+
   const dispatch = useDispatch()
+
+  // Filter our signed in user from list of friends
+  const potentialFriends = users.filter((user) => user._id.toString() !== token.id)
 
   const handleUserNameInput = (e) => {
     setQueryText(e.target.value.toLowerCase())
-    const filteredUsers = users.filter((user) => {
+    const filteredUsers = potentialFriends.filter((user) => {
       if (queryText === "") {
         return user
       } else {
@@ -28,7 +33,7 @@ const AddFriendsPage = () => {
 
   const handleUserNumberInput = (e) => {
     setQueryNumber(e.target.value)
-    const filteredUsers = users.filter((user) => {
+    const filteredUsers = potentialFriends.filter((user) => {
       if (queryNumber === "") {
         return user
       } else {
