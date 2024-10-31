@@ -43,6 +43,7 @@ const TripPage = () => {
         try {
           dispatch(addAMember(id, memberId))
         } catch (error) {
+          console.log(error)
 
         }
       })

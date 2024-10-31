@@ -26,7 +26,7 @@ const MyTripsPage = () => {
       ) : (
         <div>
           {trips.map((trip) => (
-            <TripCard tripId={trip._id} tripName={trip.trip_name} tripDescription={trip.trip_description} tripURL={trip.url} />
+            <TripCard key={trip._id} tripId={trip._id} tripName={trip.trip_name} tripDescription={trip.trip_description} tripURL={trip.url} />
           ))}
         </div>
       )}

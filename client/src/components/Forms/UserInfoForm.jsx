@@ -48,7 +48,7 @@ const UserInfoForm = () => {
 
     try {
       dispatch(updateAUser(user._id, updatedUser))
-      editModeToggle(!editModeToggle)
+      setEditModeToggle(!editModeToggle)
     } catch (error) {
       console.log(error)
     }

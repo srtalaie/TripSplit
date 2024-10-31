@@ -228,6 +228,9 @@ exports.add_member = asyncHandler(async (req, res, next) => {
     friend.trips = friend.trips.concat(trip._id)
     await trip.save()
     await friend.save()
-    return res.status(201).json(trip)
+    const returned_trip = await Trip.findById(trip._id)
+      .populate('members.member')
+      .exec()
+    return res.status(201).json(returned_trip)
   }
 })

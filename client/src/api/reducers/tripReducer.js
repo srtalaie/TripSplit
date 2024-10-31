@@ -4,18 +4,12 @@ import {
   create_trip,
   delete_trip,
   get_all_trips,
-  get_trip,
   update_trip,
 } from '../services/tripService'
 
-const initialState = {
-  selectedTrip: {},
-  trips: [],
-}
-
 const tripSlice = createSlice({
   name: 'trips',
-  initialState,
+  initialState: [],
   reducers: {
     createTrip(state, action) {
       const trip = action.payload
@@ -30,23 +24,19 @@ const tripSlice = createSlice({
     updateTrip(state, action) {
       const updatedTrip = action.payload
       const id = updatedTrip._id
-      state.trips.trips = state.trips.trips.map((trip) =>
-        trip._id !== id ? trip : updatedTrip
-      )
+      state = state.map((trip) => (trip._id !== id ? trip : updatedTrip))
       return state
     },
     appendTrip(state, action) {
-      state.trips.push(action.payload)
+      state.push(action.payload)
     },
     setTrips(state, action) {
-      return action.payload
+      state = action.payload
+      return state
     },
     removeTrip(state, action) {
       let id = action.payload
-      return state.trips.filter((trip) => trip._id !== id)
-    },
-    getTrip(state, action) {
-      state.selectedTrip = action.payload
+      return state.filter((trip) => trip._id !== id)
     },
   },
 })
@@ -58,13 +48,6 @@ export const initializeTrips = () => {
   return async (dispatch) => {
     const trips = await get_all_trips()
     dispatch(setTrips(trips))
-  }
-}
-
-export const getATrip = (tripId) => {
-  return async (dispatch) => {
-    const foundTrip = await get_trip(tripId)
-    dispatch(getTrip(foundTrip))
   }
 }
 
