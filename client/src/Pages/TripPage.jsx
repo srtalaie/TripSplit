@@ -16,6 +16,9 @@ const TripPage = () => {
 
   const token = JSON.parse(window.localStorage.getItem('loggedInUser'))
   const user = useSelector((state) => state.users.users.find((user) => user._id === token.id))
+  const trip = useSelector((state) => state.trips.find((trip) => trip._id.toString() === id))
+
+  console.log(trip);
 
   useEffect(() => {
     const populateFriends = () => {
@@ -44,7 +47,6 @@ const TripPage = () => {
           dispatch(addAMember(id, memberId))
         } catch (error) {
           console.log(error)
-
         }
       })
     }
@@ -52,10 +54,35 @@ const TripPage = () => {
 
   return (
     <div>
-      {friendArr.length === 0 ? (
-        <p>You must have friends to add members to the trip.</p>
-      ) : (
-        <UserDropdown userArr={friendArr} handleSelect={handleFriendSelect} title={"Trip Members"} handleSubmit={handleAddMember} />
+      {!trip ? (<p>...Loading</p>) : (
+        <div>
+          <h4>{trip.trip_name}</h4>
+          <p>{trip.trip_description}</p>
+          <p>{trip.owner.full_name}</p>
+          <p>Members:</p>
+          {trip.members.length <= 0 ? (<p>Add members to your trip!</p>) :
+            (
+              <div>
+                <ul>
+                  {trip.members.map((obj) => (
+                    <li key={obj.member._id}>{obj.member.full_name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          <p>Events:</p>
+          {trip.events.length <= 0 ? (<p>Add events to your trip!</p>) :
+            (
+              <div>
+
+              </div>
+            )}
+          {friendArr.length === 0 ? (
+            <p>You must have friends to add members to the trip.</p>
+          ) : (
+            <UserDropdown userArr={friendArr} handleSelect={handleFriendSelect} title={"Trip Members"} handleSubmit={handleAddMember} />
+          )}
+        </div>
       )}
     </div>
   )

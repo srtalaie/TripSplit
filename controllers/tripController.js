@@ -10,7 +10,8 @@ const { body, validationResult, oneOf } = require('express-validator')
 // Get all Trips
 exports.get_all_trips = asyncHandler(async (req, res, next) => {
   const trips = await Trip.find({})
-    .populate('members')
+    .populate('members.member')
+    .populate('owner')
     .populate('events')
     .exec()
 
@@ -26,12 +27,12 @@ exports.get_trip = asyncHandler(async (req, res, next) => {
   const decodedToken = jwt.verify(req.token, process.env.SECRET)
 
   const trip = await Trip.findById(req.params.id)
-    .populate('members')
+    .populate('members.member')
     .populate('events')
     .populate('owner')
     .exec()
 
-  const idCheck = (element) => element.member.toString() === decodedToken.id
+  const idCheck = (element) => element.member._id.toString() === decodedToken.id
 
   if (!trip) {
     return res.status(404).send({ message: 'Trip not found.' })
@@ -75,7 +76,7 @@ exports.create_trip = [
     const trip = new Trip({
       trip_name: req.body.trip_name,
       trip_description: req.body.trip_description,
-      owner: user._id,
+      owner: user,
     })
 
     if (!errors.isEmpty()) {
