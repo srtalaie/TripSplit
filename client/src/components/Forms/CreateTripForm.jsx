@@ -15,7 +15,8 @@ const CreateTripForm = () => {
 
   const token = JSON.parse(window.localStorage.getItem('loggedInUser'))
 
-  const handleTripCreate = () => {
+  const handleTripCreate = (event) => {
+    event.preventDefault()
     const newTrip = {
       trip_name: tripName,
       trip_description: tripDesc,

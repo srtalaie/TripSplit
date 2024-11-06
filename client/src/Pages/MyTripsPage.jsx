@@ -1,23 +1,10 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { get_user } from '../api/services/userService'
-
+import { useSelector } from 'react-redux'
 import TripCard from '../components/Cards/TripCard'
 
 const MyTripsPage = () => {
-  const [trips, setTrips] = useState([])
-
-  useEffect(() => {
-    const populateUserTrips = async () => {
-      const token = JSON.parse(window.localStorage.getItem('loggedInUser'))
-      if (token.token) {
-        const user = await get_user(token.id)
-        setTrips(user.trips)
-      }
-    }
-    populateUserTrips()
-  }, [])
+  const trips = useSelector((state) => state.trips)
 
   return (
     <div>
@@ -26,7 +13,7 @@ const MyTripsPage = () => {
       ) : (
         <div>
           {trips.map((trip) => (
-            <TripCard key={trip._id} tripId={trip._id} tripName={trip.trip_name} tripDescription={trip.trip_description} tripURL={trip.url} />
+            <TripCard tripId={trip._id} tripName={trip.trip_name} tripDescription={trip.trip_description} tripURL={trip.url} />
           ))}
         </div>
       )}

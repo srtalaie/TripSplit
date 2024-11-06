@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
-import { addAMember } from "../api/reducers/tripReducer"
+import { addAMember, removeATrip } from "../api/reducers/tripReducer"
 
 import UserDropdown from "../components/Dropdowns/UserDropdown"
 
@@ -11,14 +11,13 @@ const TripPage = () => {
   const [selectedMemberArr, setSelectedMemberArr] = useState([])
 
   const { id } = useParams()
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
   const token = JSON.parse(window.localStorage.getItem('loggedInUser'))
   const user = useSelector((state) => state.users.users.find((user) => user._id === token.id))
   const trip = useSelector((state) => state.trips.find((trip) => trip._id.toString() === id))
-
-  console.log(trip);
 
   useEffect(() => {
     const populateFriends = () => {
@@ -52,6 +51,16 @@ const TripPage = () => {
     }
   }
 
+  const handleDeleteTrip = async () => {
+    try {
+      dispatch(removeATrip(id))
+      navigate('/trips', { replace: true })
+    } catch (error) {
+      console.log(error)
+
+    }
+  }
+
   return (
     <div>
       {!trip ? (<p>...Loading</p>) : (
@@ -82,6 +91,7 @@ const TripPage = () => {
           ) : (
             <UserDropdown userArr={friendArr} handleSelect={handleFriendSelect} title={"Trip Members"} handleSubmit={handleAddMember} />
           )}
+          <button className='rounded-lg border-slate-500 bg-red-300 hover:bg-red-500 py-2 px-4 font-bold' onClick={handleDeleteTrip}>Delete Trip</button>
         </div>
       )}
     </div>

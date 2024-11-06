@@ -41,8 +41,14 @@ const tripSlice = createSlice({
   },
 })
 
-export const { updateTrip, appendTrip, setTrips, removeTrip, getTrip } =
-  tripSlice.actions
+export const {
+  createTrip,
+  updateTrip,
+  appendTrip,
+  setTrips,
+  removeTrip,
+  getTrip,
+} = tripSlice.actions
 
 export const initializeTrips = () => {
   return async (dispatch) => {
@@ -54,7 +60,7 @@ export const initializeTrips = () => {
 export const createATrip = (trip) => {
   return async (dispatch) => {
     const newTrip = await create_trip(trip)
-    dispatch(appendTrip(newTrip))
+    dispatch(createTrip(newTrip))
   }
 }
 
