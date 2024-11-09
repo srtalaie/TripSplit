@@ -2,13 +2,18 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { addAMember, removeATrip } from "../api/reducers/tripReducer"
+import { addAMember, removeATrip, updateATrip } from "../api/reducers/tripReducer"
 
+import FormButton from "../components/Buttons/FormButton"
 import UserDropdown from "../components/Dropdowns/UserDropdown"
+import UserInput from "../components/Input/UserInput"
 
 const TripPage = () => {
   const [friendArr, setFriendArr] = useState([])
   const [selectedMemberArr, setSelectedMemberArr] = useState([])
+  const [editModeToggle, setEditModeToggle] = useState(false)
+  const [tripName, setTripName] = useState("")
+  const [tripDesc, setTripDesc] = useState("")
 
   const { id } = useParams()
   const navigate = useNavigate()
@@ -61,6 +66,28 @@ const TripPage = () => {
     }
   }
 
+  const handleEditToggle = () => {
+    setEditModeToggle(!editModeToggle)
+  }
+
+  const handleTripEdit = (e) => {
+    e.preventDefault()
+
+    const updatedTrip = {
+      trip_name: tripName ? tripName : trip.trip_name,
+      trip_description: tripDesc ? tripDesc : trip.trip_description
+    }
+
+    try {
+      dispatch(updateATrip(trip._id, updatedTrip))
+      setEditModeToggle(!editModeToggle)
+      setTripName("")
+      setTripDesc("")
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div>
       {!trip ? (<p>...Loading</p>) : (
@@ -74,7 +101,7 @@ const TripPage = () => {
               <div>
                 <ul>
                   {trip.members.map((obj) => (
-                    <li key={obj.member._id}>{obj.member.full_name}</li>
+                    <li key={obj.member._id} id={obj.member._id}>{obj.member.full_name}</li>
                   ))}
                 </ul>
               </div>
@@ -83,7 +110,7 @@ const TripPage = () => {
           {trip.events.length <= 0 ? (<p>Add events to your trip!</p>) :
             (
               <div>
-
+                Todo
               </div>
             )}
           {friendArr.length === 0 ? (
@@ -92,6 +119,29 @@ const TripPage = () => {
             <UserDropdown userArr={friendArr} handleSelect={handleFriendSelect} title={"Trip Members"} handleSubmit={handleAddMember} />
           )}
           <button className='rounded-lg border-slate-500 bg-red-300 hover:bg-red-500 py-2 px-4 font-bold' onClick={handleDeleteTrip}>Delete Trip</button>
+          <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold' onClick={handleEditToggle}>Edit Info</button>
+          {editModeToggle ? (
+            <form onSubmit={handleTripEdit}>
+              <UserInput
+                value={tripName}
+                type="text"
+                identifier="tripName"
+                label="Trip Name"
+                handleChange={({ target }) => setTripName(target.value)}
+              />
+              <UserInput
+                value={tripDesc}
+                type="text"
+                identifier="tripDesc"
+                label="Trip Description"
+                handleChange={({ target }) => setTripDesc(target.value)}
+              />
+              <FormButton type="submit" callToAction="Update Trip Info" />
+              <button className='rounded-lg border-slate-500 bg-red-300 hover:bg-red-500 py-2 px-4 font-bold' onClick={handleEditToggle}>Cancel</button>
+            </form>
+          ) : (
+            <></>
+          )}
         </div>
       )}
     </div>

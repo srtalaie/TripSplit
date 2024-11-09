@@ -87,7 +87,7 @@ const UserInfoForm = () => {
             handleChange={({ target }) => setPassword(target.value)}
           />
           <FormButton type="submit" callToAction="Update User Info" />
-          <button onClick={handleEditToggle}>Cancel</button>
+          <button className='rounded-lg border-slate-500 bg-red-300 hover:bg-red-500 py-2 px-4 font-bold' onClick={handleEditToggle}>Cancel</button>
         </form>
       ) : (
         <div>
