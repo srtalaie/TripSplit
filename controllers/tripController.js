@@ -140,7 +140,12 @@ exports.update_trip = [
         .send({ message: "You are not authorized to update this trip's info." })
     } else {
       await Trip.findByIdAndUpdate(req.params.id, trip)
-      return res.status(201).json(trip)
+      const updated_trip = await Trip.findById(req.params.id)
+        .populate('members.member')
+        .populate('events')
+        .populate('owner')
+        .exec()
+      return res.status(201).json(updated_trip)
     }
   }),
 ]

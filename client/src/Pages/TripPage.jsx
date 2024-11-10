@@ -27,7 +27,30 @@ const TripPage = () => {
   useEffect(() => {
     const populateFriends = () => {
       if (user) {
-        setFriendArr(user.friends)
+        if (trip.members.length > 1) {
+          // Remove logged in User from members array to prep for comparison with Friends array
+          const userMemberIndex = trip.members.findIndex((obj) => obj.member._id === user._id)
+          let membersArr = trip.members.toSpliced(userMemberIndex, 1)
+
+          // Format members arr to inlcude user object within member
+          const formattedMembersArr = []
+          membersArr.forEach((obj) => formattedMembersArr.push(obj.member))
+
+          // Create an array only with friends who are already NOT members on the current trip
+          let uniquesArr = []
+          user.friends.forEach((friend) => {
+            if (formattedMembersArr.find((member) => member._id === friend._id)) {
+              return
+            } else {
+              uniquesArr.push(friend)
+            }
+          })
+          console.log(uniquesArr);
+
+          setFriendArr(uniquesArr)
+        } else {
+          setFriendArr(user.friends)
+        }
       }
     }
     populateFriends()
@@ -114,7 +137,7 @@ const TripPage = () => {
               </div>
             )}
           {friendArr.length === 0 ? (
-            <p>You must have friends to add members to the trip.</p>
+            <p>You must have friends to add members to the trip! Or all of your friends are already part of this trip!</p>
           ) : (
             <UserDropdown userArr={friendArr} handleSelect={handleFriendSelect} title={"Trip Members"} handleSubmit={handleAddMember} />
           )}
