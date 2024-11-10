@@ -6,4 +6,6 @@
 - ~~Add delete button to trip page to delete~~
 - ~~Populate trip page with trip info~~
 - ~~Edit trip info~~
-- If friend already is member don't include them in friend array
+- ~~If friend already is member don't include them in friend array~~
+- Create Events
+  - Navigate from trip page to create events page
