@@ -8,4 +8,7 @@
 - ~~Edit trip info~~
 - ~~If friend already is member don't include them in friend array~~
 - Create Events
-  - Navigate from trip page to create events page
+  - Navigate from trip page to create events page and pass trip id and payee (signed in user) to create event page
+  - Create Event
+  - Add Members to Event and set split cost
+  - Create event cards to go on the Trip's detail page

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 
 import { addAMember, removeATrip, updateATrip } from "../api/reducers/tripReducer"
 
@@ -45,8 +45,6 @@ const TripPage = () => {
               uniquesArr.push(friend)
             }
           })
-          console.log(uniquesArr);
-
           setFriendArr(uniquesArr)
         } else {
           setFriendArr(user.friends)
@@ -130,12 +128,16 @@ const TripPage = () => {
               </div>
             )}
           <p>Events:</p>
-          {trip.events.length <= 0 ? (<p>Add events to your trip!</p>) :
-            (
-              <div>
-                Todo
-              </div>
-            )}
+          {trip.events.length <= 0 ? (
+            <div>
+              <p>Add events to your trip!</p>
+              <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to={`/${id}/events/create`}>Create an Event</Link></button>
+            </div>
+          ) : (
+            <div>
+              <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to={`/${id}/events/create`}>Create an Event</Link></button>
+            </div>
+          )}
           {friendArr.length === 0 ? (
             <p>You must have friends to add members to the trip! Or all of your friends are already part of this trip!</p>
           ) : (

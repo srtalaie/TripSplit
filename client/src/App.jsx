@@ -7,11 +7,14 @@ import './App.css'
 import { initializeUsers, loginUser, logoutAUser } from "./api/reducers/userReducer"
 
 import { initializeTrips } from './api/reducers/tripReducer'
+
 import LoginSignUpNav from './components/Navs/LoginSignUpNav'
 import NavBar from './components/Navs/NavBar'
 import AddFriendsPage from './Pages/AddFriendsPage'
+import CreateEventPage from './Pages/CreateEventPage'
 import CreateTripPage from './Pages/CreateTripPage'
 import CreateUser from './Pages/CreateUser'
+import EventPage from './Pages/EventPage'
 import Home from './Pages/Home'
 import LoginPage from './Pages/LoginPage'
 import LogoutPage from './Pages/LogoutPage'
@@ -69,6 +72,8 @@ function App() {
         <Route path="/trips" element={<MyTripsPage />} />
         <Route path="/trips/create" element={<CreateTripPage />} />
         <Route path="/trips/:id" element={<TripPage />} />
+        <Route path="/:tripId/events/create" element={<CreateEventPage />} />
+        <Route path="/events/:id" element={<EventPage />} />
         <Route path='/login' element={<LoginPage handleLogin={handleLogin} />} />
         <Route path='/logout' element={<LogoutPage />} />
       </Routes>
