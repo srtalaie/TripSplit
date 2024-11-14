@@ -40,8 +40,16 @@ const CreateEventForm = () => {
       payee: user._id,
     }
 
-    console.log(newEvent);
+    try {
+      console.log(newEvent)
+    } catch (error) {
+      console.log(error)
+    }
 
+    setEventName("")
+    setEventDesc("")
+    setEventDate(new Date())
+    setTotalCost(0.0)
   }
 
   return (
