@@ -135,7 +135,14 @@ const TripPage = () => {
             </div>
           ) : (
             <div>
-              <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to={`/${id}/events/create`}>Create an Event</Link></button>
+              <ul>
+                {trip.events.map((event) => (
+                  <li>{event.event_name} <Link to={event.url}>Go to Event</Link></li>
+                ))}
+              </ul>
+              <div>
+                <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to={`/${id}/events/create`}>Create an Event</Link></button>
+              </div>
             </div>
           )}
           {friendArr.length === 0 ? (

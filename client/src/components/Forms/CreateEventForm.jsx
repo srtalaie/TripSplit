@@ -7,6 +7,8 @@ import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 
 import { createAnEvent } from '../../api/reducers/eventReducer'
+import { initializeTrips } from '../../api/reducers/tripReducer'
+
 import FormButton from '../Buttons/FormButton'
 import UserInput from '../Input/UserInput'
 
@@ -41,7 +43,8 @@ const CreateEventForm = () => {
     }
 
     try {
-      dispatch(createAnEvent(tripId, newEvent))
+      // Update trips after adding the new event so navigaing to the trip page will have updated list of events
+      dispatch(createAnEvent(tripId, newEvent)).then(() => { dispatch(initializeTrips()) })
     } catch (error) {
       console.log(error)
     }
