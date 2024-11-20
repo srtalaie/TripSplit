@@ -6,6 +6,7 @@ import CurrencyInput from 'react-currency-input-field'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 
+import { createAnEvent } from '../../api/reducers/eventReducer'
 import FormButton from '../Buttons/FormButton'
 import UserInput from '../Input/UserInput'
 
@@ -36,20 +37,19 @@ const CreateEventForm = () => {
       event_description: eventDesc,
       cost: formattedCost,
       date: eventDate,
-      trip: tripId,
       payee: user._id,
     }
 
     try {
-      console.log(newEvent)
+      dispatch(createAnEvent(tripId, newEvent))
     } catch (error) {
       console.log(error)
     }
 
     setEventName("")
     setEventDesc("")
-    setEventDate(new Date())
     setTotalCost(0.0)
+    setEventDate(new Date())
   }
 
   return (
@@ -87,6 +87,7 @@ const CreateEventForm = () => {
         <FormButton type="submit" callToAction="Create Event" />
       </form>
       <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to="/trips">My Trips</Link></button>
+      <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to={`/trips/${tripId}`}>Go To Trip</Link></button>
     </div>
   )
 }

@@ -69,7 +69,7 @@ exports.create_event = [
     .trim()
     .isLength({ min: 3 })
     .escape()
-    .withMessage('Must provide a first name.'),
+    .withMessage('Must provide an Event Name.'),
   body('event_description').trim().escape().optional(),
   body('cost')
     .trim()
