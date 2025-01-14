@@ -44,7 +44,7 @@ const eventSchema = new mongoose.Schema({
 
 //Virtual for Event's URL
 eventSchema.virtual('url').get(function () {
-  return `/events/${this._id}`
+  return `/${this.trip._id}/events/${this._id}`
 })
 
 eventSchema.set('toObject', { virtuals: true })

@@ -73,7 +73,7 @@ function App() {
         <Route path="/trips/create" element={<CreateTripPage />} />
         <Route path="/trips/:id" element={<TripPage />} />
         <Route path="/:tripId/events/create" element={<CreateEventPage />} />
-        <Route path="/events/:id" element={<EventPage />} />
+        <Route path="/:tripId/events/:id" element={<EventPage />} />
         <Route path='/login' element={<LoginPage handleLogin={handleLogin} />} />
         <Route path='/logout' element={<LogoutPage />} />
       </Routes>
