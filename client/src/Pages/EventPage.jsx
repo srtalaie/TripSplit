@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { getAEvent } from "../api/reducers/eventReducer"
@@ -15,21 +15,29 @@ const EventPage = () => {
 
   const { tripId, id } = useParams()
 
-  // Set selectedEvent
-  dispatch(getAEvent(tripId, id))
+  useEffect(() => {
+    const setSelectedEvent = async () => {
+      // Set selectedEvent
+      await dispatch(getAEvent(tripId, id))
+    }
+    setSelectedEvent()
+  }, [])
 
   const trip = useSelector((state) => state.trips.find((trip) => trip._id.toString() === tripId))
   const event = useSelector((state) => state.events.selectedEvent)
-  console.log(event)
+
+  console.log(event);
 
 
   return (
     <div>
-      {!event ? (<p>...Loading</p>) : (
+      {!event || Object.keys(event).length === 0 ? (<p>...Loading</p>) : (
         <div>
           <h4>{event.event_name}</h4>
+          <p>{event.formatted_date}</p>
           <p>{event.event_description}</p>
           <p>{event.payee.full_name}</p>
+          <p>${event.cost}</p>
           <p>Members:</p>
           {trip.members.length <= 0 ? (<p>Add members to your trip!</p>) :
             (

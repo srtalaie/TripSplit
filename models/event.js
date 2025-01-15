@@ -47,6 +47,13 @@ eventSchema.virtual('url').get(function () {
   return `/${this.trip._id}/events/${this._id}`
 })
 
+//Virtual for Event's Date display
+eventSchema.virtual('formatted_date').get(function () {
+  const d = new Date(this.date)
+  const formatted_date = d.toDateString()
+  return `${formatted_date}`
+})
+
 eventSchema.set('toObject', { virtuals: true })
 eventSchema.set('toJSON', { virtuals: true })
 
