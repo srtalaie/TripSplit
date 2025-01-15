@@ -10,6 +10,7 @@
 - Create Events
   - ~~Navigate from trip page to create events page and pass trip id and payee (signed in user) to create event page~~
   - ~~Create Event~~
-  - Create Event page with event info
+  - ~~Create Event page with event info~~
+  - Update Event form on event page
   - Add Payers to event on event page
   - Create event cards to go on the Trip's detail page
