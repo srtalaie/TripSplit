@@ -14,6 +14,7 @@ exports.get_all_events = asyncHandler(async (req, res, next) => {
   const trip = await Trip.findById(req.params.trip_id)
     .populate('members')
     .populate('events')
+    .populate('payee')
     .exec()
 
   const idCheck = (element) => element.member.toString() === decodedToken.id
