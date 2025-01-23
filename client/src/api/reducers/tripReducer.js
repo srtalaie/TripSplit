@@ -13,13 +13,7 @@ const tripSlice = createSlice({
   reducers: {
     createTrip(state, action) {
       const trip = action.payload
-      state.push({
-        trip_name: trip.trip_name,
-        trip_description: trip.trip_description,
-        events: trip.events,
-        members: trip.members,
-        owner: trip.owner,
-      })
+      state.push(trip)
     },
     updateTrip(state, action) {
       const updatedTrip = action.payload

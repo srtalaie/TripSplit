@@ -12,5 +12,6 @@
   - ~~Create Event~~
   - ~~Create Event page with event info~~
   - Update Event form on event page
-  - Add Payers to event on event page
+  - Delete Event on event page, return to trip page
+  - ~~Add Payers to event on separate add payer page~~
   - Create event cards to go on the Trip's detail page

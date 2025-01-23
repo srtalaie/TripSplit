@@ -19,21 +19,13 @@ const eventSlice = createSlice({
   reducers: {
     createEvent(state, action) {
       const event = action.payload
-      state.push({
-        event_name: event.event_name,
-        event_description: event.event_description,
-        cost: event.cost,
-        payee: event.payee,
-        trip: event.trip,
-        payers: event.payers,
-      })
+      state.push(event)
     },
     updateEvent(state, action) {
       const updatedEvent = action.payload
       const id = updatedEvent._id
-      return state.events.map((event) =>
-        event._id !== id ? event : updatedEvent
-      )
+      state = state.map((event) => (event._id !== id ? event : updatedEvent))
+      return state
     },
     appendEvent(state, action) {
       state.events.push(action.payload)
