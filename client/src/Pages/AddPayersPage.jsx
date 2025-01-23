@@ -56,6 +56,7 @@ const AddPayersPage = () => {
       try {
         const payersArr = { payersArr: payerArr }
         dispatch(addPayers(tripId, id, payersArr))
+        navigate(`/${tripId}/events/${id}`)
       } catch (error) {
         console.log(error)
       }
