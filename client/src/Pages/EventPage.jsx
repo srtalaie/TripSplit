@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useParams } from "react-router-dom"
 
-import { getAEvent } from "../api/reducers/eventReducer"
+import { getAEvent, updateAnEvent } from "../api/reducers/eventReducer"
 
 import CurrencyInput from 'react-currency-input-field'
 import DatePicker from 'react-datepicker'
@@ -38,8 +38,25 @@ const EventPage = () => {
   }
 
 
-  const handleEventEdit = () => {
+  const handleEventEdit = (e) => {
+    e.preventDefault()
 
+    const updatedEvent = {
+      event_name: eventName ? eventName : event.event_name,
+      event_description: eventDesc ? eventDesc : event.event_description,
+      cost: eventCost ? eventCost : event.cost
+    }
+
+    try {
+      dispatch(updateAnEvent(tripId, id, updatedEvent))
+      setEditModeToggle(!editModeToggle)
+      setEventName("")
+      setEventDesc("")
+      setEventCost(0.0)
+    } catch (error) {
+      console.log(error);
+
+    }
   }
 
   return (
@@ -67,6 +84,7 @@ const EventPage = () => {
       <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to={`/${tripId}/events/${id}/add-payers`}>Add Payers</Link></button>
       {/* Edit Section */}
       <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold' onClick={handleEditToggle}>Edit Info</button>
+      <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to={`/trips/${tripId}`}>Back to Trip</Link></button>
       {editModeToggle ? (
         <form onSubmit={handleEventEdit}>
           <UserInput

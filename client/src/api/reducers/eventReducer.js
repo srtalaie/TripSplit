@@ -23,8 +23,7 @@ const eventSlice = createSlice({
     },
     updateEvent(state, action) {
       const updatedEvent = action.payload
-      const id = updatedEvent._id
-      state = state.map((event) => (event._id !== id ? event : updatedEvent))
+      state.selectedEvent = updatedEvent
       return state
     },
     appendEvent(state, action) {
