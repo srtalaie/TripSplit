@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 
-import { getAEvent, updateAnEvent } from "../api/reducers/eventReducer"
+import { deleteAnEvent, getAEvent, updateAnEvent } from "../api/reducers/eventReducer"
 
 import CurrencyInput from 'react-currency-input-field'
 import DatePicker from 'react-datepicker'
@@ -19,6 +19,7 @@ const EventPage = () => {
   const [editModeToggle, setEditModeToggle] = useState(false)
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const { tripId, id } = useParams()
 
@@ -59,6 +60,15 @@ const EventPage = () => {
     }
   }
 
+  const handleDeleteAnEvent = (e) => {
+    try {
+      dispatch(deleteAnEvent(tripId, id))
+      navigate(`/trips/${tripId}`, { replace: true })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div>
       {!event || Object.keys(event).length === 0 ? (<p>...Loading</p>) : (
@@ -84,7 +94,8 @@ const EventPage = () => {
       <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to={`/${tripId}/events/${id}/add-payers`}>Add Payers</Link></button>
       {/* Edit Section */}
       <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold' onClick={handleEditToggle}>Edit Info</button>
-      <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to={`/trips/${tripId}`}>Back to Trip</Link></button>
+      <button className='rounded-lg border-slate-500 bg-cyan-300 hover:bg-cyan-500 py-2 px-4 font-bold'><Link to={`/trips/${tripId}`}>Go to Trip</Link></button>
+      <button className='rounded-lg border-slate-500 bg-red-300 hover:bg-red-500 py-2 px-4 font-bold' onClick={handleDeleteAnEvent}>Delete Event</button>
       {editModeToggle ? (
         <form onSubmit={handleEventEdit}>
           <UserInput

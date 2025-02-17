@@ -11,8 +11,9 @@
   - ~~Navigate from trip page to create events page and pass trip id and payee (signed in user) to create event page~~
   - ~~Create Event~~
   - ~~Create Event page with event info~~
-  - Update Event form on event page
-  - Delete Event on event page, return to trip page
+  - ~~Update Event form on event page~~
+  - ~~Delete Event on event page, return to trip page~~
   - ~~Add Payers to event on separate add payer page~~
+  - Deleting event does not update the list of events on TripPage
   - Create event cards to go on the Trip's detail page
   - ~~After event is created it does not show up in UI. Needs to update everytime it goes to trip/event page~~
