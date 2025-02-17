@@ -33,8 +33,10 @@ const eventSlice = createSlice({
       return action.payload
     },
     removeEvent(state, action) {
-      let id = action.payload
-      return state.events.filter((event) => event._id !== id)
+      let { tripId, eventId } = action.payload
+      console.log(state.trips)
+
+      return state.events.filter((event) => event._id !== eventId)
     },
     getEvent(state, action) {
       state.selectedEvent = action.payload
@@ -89,7 +91,8 @@ export const addPayers = (tripId, eventId, payersArr) => {
 export const deleteAnEvent = (tripId, eventId) => {
   return async (dispatch) => {
     await delete_event(tripId, eventId)
-    dispatch(removeEvent(eventId))
+    const ids = { tripId, eventId }
+    dispatch(removeEvent(ids))
   }
 }
 

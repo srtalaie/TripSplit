@@ -8,6 +8,7 @@ import CurrencyInput from 'react-currency-input-field'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 
+import { updateATrip } from "../api/reducers/tripReducer"
 import FormButton from "../components/Buttons/FormButton"
 import UserInput from "../components/Input/UserInput"
 
@@ -63,6 +64,8 @@ const EventPage = () => {
   const handleDeleteAnEvent = (e) => {
     try {
       dispatch(deleteAnEvent(tripId, id))
+      const updatedTrip = trip.events.filter((event) => event._id !== id)
+      dispatch(updateATrip(tripId, updatedTrip))
       navigate(`/trips/${tripId}`, { replace: true })
     } catch (error) {
       console.log(error)
