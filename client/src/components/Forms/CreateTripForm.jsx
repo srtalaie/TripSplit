@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux"
 import { createATrip } from "../../api/reducers/tripReducer"
 
 import { Link } from "react-router-dom"
+import { toast } from "react-toastify"
 import FormButton from "../Buttons/FormButton"
 import UserInput from "../Input/UserInput"
 
@@ -25,8 +26,9 @@ const CreateTripForm = () => {
 
     try {
       dispatch(createATrip(newTrip))
+      toast.success("Trip was created.")
     } catch (error) {
-      console.log(error)
+      toast.error("Something went wrong :(")
     }
 
     setTripName('')

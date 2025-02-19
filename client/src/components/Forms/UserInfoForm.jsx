@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { toast } from 'react-toastify'
 import { updateAUser } from '../../api/reducers/userReducer'
 import FormButton from '../Buttons/FormButton'
 import UserInput from '../Input/UserInput'
@@ -49,8 +50,9 @@ const UserInfoForm = () => {
     try {
       dispatch(updateAUser(user._id, updatedUser))
       setEditModeToggle(!editModeToggle)
+      toast.success("User info was updated.")
     } catch (error) {
-      console.log(error)
+      toast.error("Something went wrong :(")
     }
   }
 

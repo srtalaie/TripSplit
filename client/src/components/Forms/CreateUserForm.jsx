@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 
 import { createAUser } from '../../api/reducers/userReducer'
 
+import { toast } from 'react-toastify'
 import FormButton from '../Buttons/FormButton'
 import UserInput from '../Input/UserInput'
 
@@ -31,8 +32,9 @@ const CreateUserForm = () => {
     try {
       dispatch(createAUser(newUser))
       navigate('/login')
+      toast.success("User was created.")
     } catch (error) {
-      console.log(error)
+      toast.error("Something went wrong :(")
     }
 
     setFirstName('')

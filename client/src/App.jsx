@@ -8,6 +8,8 @@ import { initializeUsers, loginUser, logoutAUser } from "./api/reducers/userRedu
 
 import { initializeTrips } from './api/reducers/tripReducer'
 
+import { ToastContainer } from "react-toastify"
+
 import LoginSignUpNav from './components/Navs/LoginSignUpNav'
 import NavBar from './components/Navs/NavBar'
 import AddFriendsPage from './Pages/AddFriendsPage'
@@ -64,6 +66,20 @@ function App() {
       ) : (
         <LoginSignUpNav />
       )}
+
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Bounce}
+      />
 
       <Routes>
         <Route path="/" element={<Home />} />
