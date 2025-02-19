@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom"
 
 import { addPayers, getAEvent } from "../api/reducers/eventReducer"
 
+import { toast } from "react-toastify"
 import PayerDropdown from "../components/Dropdowns/PayerDropdown"
 
 const AddPayersPage = () => {
@@ -57,8 +58,9 @@ const AddPayersPage = () => {
         const payersArr = { payersArr: payerArr }
         dispatch(addPayers(tripId, id, payersArr))
         navigate(`/${tripId}/events/${id}`)
+        toast.success("Payers were added.")
       } catch (error) {
-        console.log(error)
+        toast.error("Something went wrong :(")
       }
     }
   }

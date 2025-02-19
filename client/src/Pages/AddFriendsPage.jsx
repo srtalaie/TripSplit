@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { addFriend } from '../api/reducers/userReducer'
 
+import { toast } from 'react-toastify'
 import UserInput from '../components/Input/UserInput'
 
 const AddFriendsPage = () => {
@@ -51,8 +52,9 @@ const AddFriendsPage = () => {
     const friendId = e.target.value
     try {
       dispatch(addFriend(friendId))
+      toast.success("Friend was added.")
     } catch (error) {
-      alert("Could not add user, please check to see if the User is already a friend")
+      toast.error("Could not add user, please check to see if the User is already a friend")
     }
   }
 

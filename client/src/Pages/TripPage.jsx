@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 
 import { addAMember, removeATrip, updateATrip } from "../api/reducers/tripReducer"
 
+import { toast } from "react-toastify"
 import FormButton from "../components/Buttons/FormButton"
 import UserDropdown from "../components/Dropdowns/UserDropdown"
 import UserInput from "../components/Input/UserInput"
@@ -104,8 +105,9 @@ const TripPage = () => {
       setEditModeToggle(!editModeToggle)
       setTripName("")
       setTripDesc("")
+      toast.success("Trip was edited.")
     } catch (error) {
-      console.log(error)
+      toast.error("Something went wrong :(")
     }
   }
 

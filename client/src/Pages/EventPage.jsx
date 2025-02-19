@@ -8,6 +8,7 @@ import CurrencyInput from 'react-currency-input-field'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 
+import { toast } from "react-toastify"
 import { updateATrip } from "../api/reducers/tripReducer"
 import FormButton from "../components/Buttons/FormButton"
 import UserInput from "../components/Input/UserInput"
@@ -55,9 +56,9 @@ const EventPage = () => {
       setEventName("")
       setEventDesc("")
       setEventCost(0.0)
+      toast.success("Event was updated.")
     } catch (error) {
-      console.log(error);
-
+      toast.error("Something went wrong :(")
     }
   }
 
